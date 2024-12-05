@@ -64,29 +64,34 @@
                 </form>
             </div>
             <div class="form-box register">
-                <form action="">
+                <form id="register_form" method="POST" action="/register">
 
                     <h2>Sign Up</h2>
 
                     <div class="input-box">
                         <span class="icon"><i class='bx bxs-user'></i></span>
-                        <input type="text" required>
-                        <label >Username</label>
+                        <input id="fname" type="text" required>
+                        <label>First Name</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-user'></i></span>
+                        <input id="lname" type="text" required>
+                        <label>Last Name</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><i class='bx bxs-envelope'></i></span>
-                        <input type="email" required>
-                        <label >Email</label>
+                        <input id="register_email" type="email" required>
+                        <label>Email</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><i class='bx bxs-lock-alt' ></i></span>
-                        <input type="password" required>
+                        <input id="register_password" type="password" required>
                         <label>Password</label>
                     </div>
                     <div class="remember-password">
                         <label for=""><input type="checkbox">I agree with this statment</label>
                     </div>
-                    <button class="btn">Login In</button>
+                    <button id="register_btn" class="btn">Sign up</button>
                     <div class="create-account">
                         <p>Already Have An Account? <a href="#" class="login-link">Sign In</a></p>
                     </div>

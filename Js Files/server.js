@@ -1,3 +1,5 @@
+const { addUser } = require('./database');
+
 const express = require('express');
 const path = require('path');
 
@@ -6,9 +8,17 @@ const port = 3000;
 
 root = path.join(__dirname, '..')
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(root));
+app.use(express.json());
 
-app.get('/', (req, res) => {
+app.post("/register", (req, res) => {
+  const { fname, lname, email, password } = req.body;
+  console.log(req.body)
+  addUser(fname, lname, email, password)
+})
+
+app.get("/", (req, res) => {
   res.sendFile(path.join(root, 'Html Files/Main_Page.html'));
 });
 

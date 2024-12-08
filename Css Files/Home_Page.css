@@ -182,9 +182,12 @@ nav .sticky {
 
 .collection {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-items: flex-start;
+    justify-content: center;
+    /* flex-direction: column; */
+    /* align-items: center; */
     margin-top: 100px;
+    flex-wrap: wrap;
 }
 
 .collection h1 {
@@ -209,6 +212,7 @@ nav .sticky {
     border-radius: 32px;
     filter: drop-shadow(5px , 5px , 10px , rgba(0,0,0,0.15));
     transition: all 0.3 ease-out;
+    margin: 10px;
 }
 
 .collection-car-item:hover {

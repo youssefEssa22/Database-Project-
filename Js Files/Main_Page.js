@@ -31,3 +31,4 @@ register_form.addEventListener("submit", (e)=> {
         }),
       }).then(response => response.json())
 })
+

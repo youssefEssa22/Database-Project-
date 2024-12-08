@@ -1,21 +1,34 @@
-const mysql = require("mysql2");
+const { query } = require("express");
+const mysql = require("mysql2/promise");
 
-const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "carsProject",
-});
+async function createConnection() {
+  connection = await mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "carsProject",
+  });
+  console.log("Database connected!");
 
-function addUser(fname, lname, email, password) {
-    connection.connect();
-
-    connection.query(
-      `INSERT INTO users (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)`,
-      [fname, lname, email, password])
-
-    connection.end();
+  return connection;
 }
 
+async function addUser(fname, lname, email, password) {
+  const connection = await createConnection();
+  await connection.execute(
+    `INSERT INTO users (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)`,
+    [fname, lname, email, password]
+  );
 
-module.exports = { addUser };
+  connection.end();
+}
+
+async function readCars() {
+  const connection = await createConnection();
+  const [cars] = await connection.execute("SELECT * FROM cars");
+  // console.log(cars)
+  connection.end();
+  return cars;
+}
+
+module.exports = { addUser, readCars };

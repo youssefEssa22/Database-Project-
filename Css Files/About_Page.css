@@ -12,7 +12,7 @@ body{
   
 }
 .About_Page{
-    background: url(/Database-Project-/Photos/Screenshot\ \(162\).png) no-repeat;
+    background: url(../Photos/Screenshot\ \(162\).png) no-repeat;
     background-position: center;
     background-size:cover ;
     height: 100vh;
@@ -70,7 +70,7 @@ body{
     position: relative;
     flex-direction: column;
     align-items: center;
-    background-image: url(/Database-Project-/Photos/Screenshot\ \(162\).png);
+    background-image: url(../Photos/Screenshot\ \(162\).png);
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%;

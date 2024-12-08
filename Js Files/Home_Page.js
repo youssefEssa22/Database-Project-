@@ -14,22 +14,22 @@ document
     .forEach((link) => link.addEventListener("click" , toggleMenu));
 
 
-const sr = ScroRevall ({
-    origin :"bottom",
-    distance : "40px",
-    duration : 1000,
-    dealy : 400,
-    easing : "ease-in-out" 
-});
+// const sr = ScroRevall ({
+//     origin :"bottom",
+//     distance : "40px",
+//     duration : 1000,
+//     dealy : 400,
+//     easing : "ease-in-out" 
+// });
 
-sr.revall(".hero-headlines" , {origin : "left"});
-sr.revall(".hero-page img" , {origin : "right"});
-sr.revall(".about");
+// sr.revall(".hero-headlines" , {origin : "left"});
+// sr.revall(".hero-page img" , {origin : "right"});
+// sr.revall(".about");
 
-sr.revall(".about h1" , {delay : "500"});
-sr.revall(".about p" , {delay : "700"});
-sr.revall(".about-info" , {delay : "1000"});
-sr.revall(".collection h1");
+// sr.revall(".about h1" , {delay : "500"});
+// sr.revall(".about p" , {delay : "700"});
+// sr.revall(".about-info" , {delay : "1000"});
+// sr.revall(".collection h1");
 
 
 
@@ -45,7 +45,7 @@ function createCarElement(model_name, price) {
     car_img = document.createElement("img");
     console.log(car_img)
     car_img.setAttribute("alt", "Car image");
-    car_img.setAttribute("src", "/Photos/Screenshot (166).png");
+    car_img.setAttribute("src", "../Photos/Screenshot (166).png");
     outer_container_div.appendChild(car_img)
 
     inner_container_div = document.createElement("div");
@@ -112,5 +112,5 @@ async function showCars() {
         container.appendChild(car_cont)
     })
 }
-
+console.log("t")
 showCars()

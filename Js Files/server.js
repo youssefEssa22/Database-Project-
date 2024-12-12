@@ -24,7 +24,7 @@ app.get("/cars", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(root, "Html Files/Main_Page.html"));
+  res.redirect("/Html Files/Main_Page.html")
 });
 
 app.listen(port, () => {

@@ -1,12 +1,15 @@
-const { addUser, readCars } = require("./database");
+import { addUser, readCars } from "./database.mjs";
 
-const express = require("express");
-const path = require("path");
+import express from "express"
+import path from "path";
+import { fileURLToPath } from 'url';
 
 const app = express();
 const port = 3000;
 
-root = path.join(__dirname, "..");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const root = path.join(__dirname, "..");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(root));

@@ -31,7 +31,7 @@ app.get("/cars", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.redirect("/Html Files/Main_Page.html")
+  res.sendFile(path.join(root, "html/Main_Page.html"));
 });
 
 app.listen(port, () => {

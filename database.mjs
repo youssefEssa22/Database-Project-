@@ -11,8 +11,6 @@ async function addUser(fname, lname, email, password) {
     INSERT INTO users (first_name, last_name, email, user_password) 
     VALUES (${fname}, ${lname}, ${email}, ${password})
   `;
-
-  connection.end();
 }
 
 async function readCars() {

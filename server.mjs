@@ -9,7 +9,7 @@ const port = 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const root = path.join(__dirname, "..");
+const root = __dirname;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(root));
@@ -27,7 +27,7 @@ app.get("/cars", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.redirect("/Html Files/Main_Page.html")
+  res.redirect("/html/Main_Page.html")
 });
 
 app.listen(port, () => {

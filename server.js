@@ -1,4 +1,5 @@
-const { addUser, readCars } = require("./database");
+const { addUser, readCars } = require('./database');
+const { initializeDatabase } = require('./database');
 
 const express = require("express");
 const path = require("path");
@@ -6,7 +7,13 @@ const path = require("path");
 const app = express();
 const port = 3000;
 
-root = path.join(__dirname, "..");
+root = path.join(__dirname, ".");
+
+initializeDatabase().then(() => {
+  console.log("Database initialization complete.");
+}).catch((err) => {
+  console.error("Failed to initialize the database:", err);
+});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(root));

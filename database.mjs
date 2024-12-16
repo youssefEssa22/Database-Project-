@@ -28,6 +28,26 @@ async function getCustomer(email) {
   }
 }
 
+async function getCustomers() {
+  try {
+    const customers = await sql`
+      SELECT * FROM customers`;
+    return customers
+  } catch (error) {
+    console.error("Error in getCustomer:", error);
+    throw error;
+  }
+}
+
+async function deleteCustomer(id) {
+  try {
+    await sql`DELETE FROM customers WHERE customer_id = ${id}`;
+  } catch (error){
+    console.log("Error in deleteCustomer", error);
+    throw error;
+  }
+}
+
 // Read all available cars (with optional filters and sorting)
 async function readCars(filters = {}, sortBy = "model") {
   const { model, year, status, officeId } = filters;
@@ -178,5 +198,7 @@ export {
   getCustomerReservations,
   getDailyPayments,
   addPayment,
-  getCustomer
+  getCustomer,
+  getCustomers,
+  deleteCustomer
 };

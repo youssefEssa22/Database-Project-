@@ -10,7 +10,9 @@ import {
   addReservation,
   getCustomerReservations,
   getCustomer,
+  getCustomers,
 } from "./database.mjs";
+import { admin } from "./routes/admin.mjs";
 
 const app = express();
 const port = 3000;
@@ -24,6 +26,7 @@ const root = __dirname;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(root));
 app.use(express.json());
+app.use('/admin', admin);
 
 // Route: Register a new customer
 app.post("/register", async (req, res) => {
@@ -74,27 +77,13 @@ app.get("/cars", async (req, res) => {
   }
 });
 
-// Route: Add a new car (Admin)
-app.post("/admin/cars", async (req, res) => {
-  const { model, year, plateId, status, officeId } = req.body;
+app.get("/customers", async (req, res) =>{
   try {
-    await addCar(model, year, plateId, status, officeId);
-    res.status(201).json({ message: "Car added successfully!" });
+    const customers = await getCustomers();
+    res.json(customers);
   } catch (error) {
-    console.error("Error in /admin/cars:", error);
-    res.status(500).json({ error: "Failed to add car." });
-  }
-});
-
-// Route: Delete a car (Admin)
-app.delete("/admin/cars/:id", async (req, res) => {
-  const carId = req.params.id;
-  try {
-    await deleteCar(carId);
-    res.status(200).json({ message: "Car deleted successfully!" });
-  } catch (error) {
-    console.error("Error in /admin/cars/:id:", error);
-    res.status(500).json({ error: "Failed to delete car." });
+    console.error("Error in /customers:", error);
+    res.status(500).json({ error: "Failed to fetch customers." });
   }
 });
 

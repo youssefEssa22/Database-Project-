@@ -1,3 +1,5 @@
+import { response } from "express"
+
 const loginsec=document.querySelector('.login-section')
 const loginlink=document.querySelector('.login-link')
 const registerlink=document.querySelector('.register-link')
@@ -9,6 +11,20 @@ loginlink.addEventListener('click',()=>{
 })
 
 const register_form = document.querySelector("#register_form")
+const login_form = document.querySelector("#login_form")
+
+login_form.addEventListener("submit", (e) =>{
+  e.preventDefault()
+  const email = document.querySelector("#email").value
+  const password = document.querySelector("#password").value
+  fetch('/login', {
+    method: 'POST',
+    body: JSON.stringify({
+      email,
+      password
+    }),
+  }).then(response => response.json())
+});
 
 register_form.addEventListener("submit", (e)=> {
     e.preventDefault()
@@ -16,6 +32,7 @@ register_form.addEventListener("submit", (e)=> {
     const lname = document.querySelector("#lname").value
     const email = document.querySelector("#register_email").value
     const password = document.querySelector("#register_password").value
+    const name = fname+ ' ' + lname
     console.log(fname, lname, email, password)
 
     fetch('/register', {
@@ -24,11 +41,10 @@ register_form.addEventListener("submit", (e)=> {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          fname,
-          lname,
+          name,
           email,
           password,
         }),
       }).then(response => response.json())
-})
+});
 

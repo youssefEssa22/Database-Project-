@@ -1,4 +1,3 @@
--- Creation
 
 CREATE TABLE cars (
     car_id SERIAL PRIMARY KEY,

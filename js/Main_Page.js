@@ -1,5 +1,3 @@
-import { response } from "express"
-
 const loginsec=document.querySelector('.login-section')
 const loginlink=document.querySelector('.login-link')
 const registerlink=document.querySelector('.register-link')

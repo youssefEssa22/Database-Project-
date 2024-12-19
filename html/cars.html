@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cars Table</title>
+    <link rel="stylesheet" href="../css/styles.css"> <!-- Add your CSS file path here -->
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        form {
+            margin: 20px 0;
+        }
+        input, select, button {
+            margin: 5px 0;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cars Management</h1>
+
+    <!-- Table to Display Cars -->
+    <table id="cars-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Plate ID</th>
+                <th>Status</th>
+                <th>Office</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <!-- Form to Add New Car -->
+    <form id="add-car-form">
+        <h2>Add New Car</h2>
+        <input type="text" id="model" placeholder="Model" required>
+        <input type="number" id="year" placeholder="Year" required>
+        <input type="text" id="plate_id" placeholder="Plate ID" required>
+        <select id="status" required>
+            <option value="active">Active</option>
+            <option value="out_of_service">Out of Service</option>
+            <option value="rented">Rented</option>
+        </select>
+        <select id="office_id" required>
+            <option value="" disabled selected>Select Office</option>
+            <!-- Office options will be dynamically inserted here -->
+        </select>
+        <button type="submit">Add Car</button>
+    </form>
+
+    <script>
+        const API_CARS = '/cars';
+        const API_OFFICES = '/offices';
+
+        // Fetch and display cars
+        async function fetchCars() {
+            try {
+                const res = await fetch(API_CARS);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch cars.');
+                }
+                const cars = await res.json();
+                const tableBody = document.querySelector('#cars-table tbody');
+                tableBody.innerHTML = ''; // Clear existing rows
+
+                cars.forEach(car => {
+                    const row = document.createElement('tr');
+
+                    row.innerHTML = `
+                        <td>${car.car_id}</td>
+                        <td>${car.model}</td>
+                        <td>${car.year}</td>
+                        <td>${car.plate_id}</td>
+                        <td>${car.status}</td>
+                        <td>${car.office_name || 'N/A'}</td>
+                        <td>
+                            <button onclick="deleteCar(${car.car_id})">Delete</button>
+                        </td>
+                    `;
+
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error(error);
+                alert('Could not load cars.');
+            }
+        }
+
+        // Fetch and populate office options
+        async function fetchOffices() {
+            try {
+                const res = await fetch(API_OFFICES);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch offices.');
+                }
+                const offices = await res.json();
+                const officeSelect = document.querySelector('#office_id');
+                officeSelect.innerHTML = '<option value="" disabled selected>Select Office</option>'; // Reset options
+
+                offices.forEach(office => {
+                    const option = document.createElement('option');
+                    option.value = office.office_id;
+                    option.textContent = office.name;
+                    officeSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error(error);
+                alert('Could not load offices.');
+            }
+        }
+
+        // Add a new car
+        document.querySelector('#add-car-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const model = document.querySelector('#model').value;
+            const year = document.querySelector('#year').value;
+            const plateId = document.querySelector('#plate_id').value;
+            const status = document.querySelector('#status').value;
+            const officeId = document.querySelector('#office_id').value;
+
+            try {
+                const res = await fetch(API_CARS, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ model, year, plateId, status, officeId }),
+                });
+
+                if (!res.ok) {
+                    throw new Error('Failed to add car.');
+                }
+
+                alert('Car added successfully!');
+                fetchCars(); // Reload cars table
+            } catch (error) {
+                console.error(error);
+                alert('Could not add car.');
+            }
+        });
+
+        // Delete a car
+        async function deleteCar(carId) {
+            if (!confirm('Are you sure you want to delete this car?')) {
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_CARS}/${carId}`, {
+                    method: 'DELETE',
+                });
+
+                if (!res.ok) {
+                    throw new Error('Failed to delete car.');
+                }
+
+                alert('Car deleted successfully!');
+                fetchCars(); // Reload cars table
+            } catch (error) {
+                console.error(error);
+                alert('Could not delete car.');
+            }
+        }
+        fetchCars();
+        fetchOffices();
+    </script>
+</body>
+</html>

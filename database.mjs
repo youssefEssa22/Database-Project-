@@ -51,16 +51,11 @@ async function deleteCustomer(id) {
 // Read all available cars (with optional filters and sorting)
 async function readCars(filters = {}, sortBy = "model") {
   const { model, year, status, officeId } = filters;
+  console.log(model, year, status, officeId);
 
   try {
     const cars = await sql`
       SELECT * FROM cars
-      WHERE
-        (${model} IS NULL OR model = ${model}) AND
-        (${year} IS NULL OR year = ${year}) AND
-        (${status} IS NULL OR status = ${status}) AND
-        (${officeId} IS NULL OR office_id = ${officeId})
-      ORDER BY ${sql(sortBy)}
     `;
     return cars;
   } catch (error) {
@@ -71,6 +66,7 @@ async function readCars(filters = {}, sortBy = "model") {
 
 // Insert a new car
 async function addCar(model, year, plateId, status = "active", officeId) {
+  console.log(model, year, plateId, status, officeId);
   try {
     await sql`
       INSERT INTO cars (model, year, plate_id, status, office_id)

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addOffice, deleteCar, deleteCustomer, deleteOffice } from "../database.mjs";
+import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar } from "../database.mjs";
 const admin = Router();
 
 admin.get("/customers", async (req, res) => res.redirect("/html/customers.html"));
@@ -17,6 +17,7 @@ admin.delete("/customers/:id", async (req, res) => {
 
 admin.post("/cars", async (req, res) => {
     const { model, year, plateId, status, officeId } = req.body;
+    console.log(model, year, plateId, status, officeId);
     try {
       await addCar(model, year, plateId, status, officeId);
       res.status(201).json({ message: "Car added successfully!" });
@@ -58,6 +59,10 @@ admin.post("/cars", async (req, res) => {
         res.status(500).json({ error: "Failed to add office."});
     }
   })
+
+  admin.get("/offices", async (req, res) => res.redirect("/html/offices.html"));
+
+  admin.get("/cars", async (req, res) => res.redirect("/html/cars.html"));
 
 export{
     admin

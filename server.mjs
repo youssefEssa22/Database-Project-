@@ -11,6 +11,7 @@ import {
   getCustomerReservations,
   getCustomer,
   getCustomers,
+  getOffices,
 } from "./database.mjs";
 import { admin } from "./routes/admin.mjs";
 
@@ -84,6 +85,16 @@ app.get("/customers", async (req, res) =>{
   } catch (error) {
     console.error("Error in /customers:", error);
     res.status(500).json({ error: "Failed to fetch customers." });
+  }
+});
+
+app.get("/offices", async (req, res) =>{
+  try {
+    const offices = await getOffices();
+    res.json(offices);
+  } catch (error) {
+    console.error("Error in /offices:", error);
+    res.status(500).json({ error: "failed to fetch offices"});
   }
 });
 

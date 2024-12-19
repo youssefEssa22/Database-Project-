@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addCar, deleteCar, deleteCustomer } from "../database.mjs";
+import { addOffice, deleteCar, deleteCustomer, deleteOffice } from "../database.mjs";
 const admin = Router();
 
 admin.get("/customers", async (req, res) => res.redirect("/html/customers.html"));
@@ -36,6 +36,28 @@ admin.post("/cars", async (req, res) => {
       res.status(500).json({ error: "Failed to delete car." });
     }
   });
+
+  admin.delete("/offices/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+        await deleteOffice(id);
+        res.status(200).json({ message: "office deleted successfully!" })
+    } catch (error) {
+        console.error("Error in /admin/office:id:",error);
+        res.status(500).json({ error: "failed to delete office." });
+    }    
+  })
+  
+  admin.post("/offices", async (req, res) => {
+    const { name, location, phone } = req.body;
+    try {
+        await addOffice(name, location, phone);
+        res.status(201).json({ message: "Office added successfully!" });
+    } catch (error) {
+        console.error("Error in /admin/offinces:", error);
+        res.status(500).json({ error: "Failed to add office."});
+    }
+  })
 
 export{
     admin

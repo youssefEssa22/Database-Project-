@@ -94,6 +94,38 @@ async function deleteCar(carId) {
   }
 }
 
+async function getOffices() {
+  try {
+    const customers = await sql`
+      SELECT * FROM offices`;
+    return customers
+  } catch (error) {
+    console.error("Error in getOffices:", error);
+    throw error;
+  }
+}
+
+async function deleteOffice(id) {
+  try {
+    await sql`DELETE FROM offices WHERE office_id = ${id}`;
+  } catch (error){
+    console.log("Error in deleteOffice", error);
+    throw error;
+  }
+}
+
+async function addOffice(name, location, phone) {
+  try {
+    await sql`
+    INSERT INTO offices (name, location, phone)
+    VALUES (${name}, ${location}, ${phone})
+    `;
+  } catch (error) {
+    console.error("Error in aaddOffice:", error);
+    throw error;
+  }
+}
+
 // Create a new reservation
 async function addReservation(carId, customerId, officeId, pickupDate, returnDate) {
   try {
@@ -200,5 +232,8 @@ export {
   addPayment,
   getCustomer,
   getCustomers,
-  deleteCustomer
+  deleteCustomer,
+  getOffices,
+  deleteOffice,
+  addOffice
 };

@@ -1,8 +1,6 @@
 import { Router } from "express";
-import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar } from "../database.mjs";
+import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation } from "../database.mjs";
 const admin = Router();
-
-admin.get("/customers", async (req, res) => res.redirect("/html/customers.html"));
 
 admin.delete("/customers/:id", async (req, res) => {
     const customerId = req.params.id;
@@ -48,6 +46,17 @@ admin.post("/cars", async (req, res) => {
         res.status(500).json({ error: "failed to delete office." });
     }    
   })
+
+  admin.delete("/reservations/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+      await deleteReservation(id);
+      res.status(200).json({ message: "reservation deleted successfully!" })
+    } catch (error) {
+      console.error("Error in /admin/reservation:id:",error);
+        res.status(500).json({ error: "failed to delete reservation." });
+    }
+  })
   
   admin.post("/offices", async (req, res) => {
     const { name, location, phone } = req.body;
@@ -60,9 +69,27 @@ admin.post("/cars", async (req, res) => {
     }
   })
 
+  admin.post("/reservations", async (req, res) => {
+    const { car_id, customer_id, pickup_date, return_date} = req.body;
+    try {
+
+      await addReservation(car_id, customer_id, pickup_date, return_date);
+      res.status(201).json({ message: "Reservation added successfully!"});
+    } catch (error) {
+      console.error("Error in /admin/reservations:", error);
+        res.status(500).json({ error: "Failed to add reservation."});
+    }
+  })
+
+  admin.get("/customers", async (req, res) => res.redirect("/html/customers.html"));
+
   admin.get("/offices", async (req, res) => res.redirect("/html/offices.html"));
 
   admin.get("/cars", async (req, res) => res.redirect("/html/cars.html"));
+
+  admin.get("/reservations", async (req, res) => res.redirect("/html/reservations.html"));
+  
+  admin.get("/payments", async (req, res) => res.redirect("/html/payments.html"));
 
 export{
     admin

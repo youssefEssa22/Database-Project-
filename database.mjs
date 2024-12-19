@@ -123,16 +123,26 @@ async function addOffice(name, location, phone) {
 }
 
 // Create a new reservation
-async function addReservation(carId, customerId, officeId, pickupDate, returnDate) {
+async function addReservation(carId, customerId, pickupDate, returnDate) {
   try {
     await sql`
-      INSERT INTO reservations (car_id, customer_id, office_id, pickup_date, return_date)
-      VALUES (${carId}, ${customerId}, ${officeId}, ${pickupDate}, ${returnDate})
+      INSERT INTO reservations (car_id, customer_id, pickup_date, return_date)
+      VALUES (${carId}, ${customerId}, ${pickupDate}, ${returnDate})
     `;
   } catch (error) {
     console.error("Error in addReservation:", error);
     throw error;
   }
+}
+
+async function deleteReservation(id) {
+  try {
+    await sql`DELETE FROM reservations WHERE id = ${id}`
+  } catch (error) {
+    console.error("Error in deleteReservation:", error);
+    throw error;
+  }
+  
 }
 
 // Fetch all reservations within a specified period
@@ -231,5 +241,6 @@ export {
   deleteCustomer,
   getOffices,
   deleteOffice,
-  addOffice
+  addOffice,
+  deleteReservation,
 };

@@ -33,8 +33,8 @@ CREATE TABLE reservations (
     car_id INT NOT NULL,
     customer_id INT NOT NULL,
     reservation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    pickup_date TIMESTAMP NOT NULL,
-    return_date TIMESTAMP NOT NULL,
+    pickup_date  DATE NOT NULL,
+    return_date  DATE NOT NULL,
     FOREIGN KEY (car_id) REFERENCES cars(car_id),
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
 );

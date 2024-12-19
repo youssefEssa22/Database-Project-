@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservations Table</title>
+    <link rel="stylesheet" href="../css/styles.css"> <!-- Add your CSS file path here -->
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        form {
+            margin: 20px 0;
+        }
+        input, select, button {
+            margin: 5px 0;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reservations Management</h1>
+
+    <!-- Table to Display Reservations -->
+    <table id="reservations-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Car</th>
+                <th>Customer</th>
+                <th>Reservation Date</th>
+                <th>Pickup Date</th>
+                <th>Return Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <!-- Form to Add New Reservation -->
+    <form id="add-reservation-form">
+        <h2>Add New Reservation</h2>
+        <select id="car_id" required>
+            <option value="" disabled selected>Select Car</option>
+            <!-- Car options will be dynamically inserted here -->
+        </select>
+        <select id="customer_id" required>
+            <option value="" disabled selected>Select Customer</option>
+            <!-- Customer options will be dynamically inserted here -->
+        </select>
+        <input type="date" id="pickup_date" placeholder="Pickup Date" required>
+        <input type="date" id="return_date" placeholder="Return Date" required>
+        <button type="submit">Add Reservation</button>
+    </form>
+
+    <script>
+        const API_RESERVATIONS = '/reservations';
+        const API_CARS = '/cars';
+        const API_CUSTOMERS = '/customers';
+
+        // Fetch and display reservations
+        async function fetchReservations() {
+            try {
+                const res = await fetch(API_RESERVATIONS);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch reservations.');
+                }
+                const reservations = await res.json();
+                const tableBody = document.querySelector('#reservations-table tbody');
+                tableBody.innerHTML = ''; // Clear existing rows
+
+                reservations.forEach(reservation => {
+                    const row = document.createElement('tr');
+
+                    row.innerHTML = `
+                        <td>${reservation.reservation_id}</td>
+                        <td>${reservation.plate_id || 'N/A'}</td>
+                        <td>${reservation.customer_id || 'N/A'}</td>
+                        <td>${new Date(reservation.reservation_date).toLocaleString()}</td>
+                        <td>${new Date(reservation.pickup_date).toLocaleString()}</td>
+                        <td>${new Date(reservation.return_date).toLocaleString()}</td>
+                        <td>
+                            <button onclick="deleteReservation(${reservation.reservation_id})">Delete</button>
+                        </td>
+                    `;
+
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error(error);
+                alert('Could not load reservations.');
+            }
+        }
+
+        // Fetch and populate car options
+        async function fetchCars() {
+            try {
+                const res = await fetch(API_CARS);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch cars.');
+                }
+                const cars = await res.json();
+                const carSelect = document.querySelector('#car_id');
+                carSelect.innerHTML = '<option value="" disabled selected>Select Car</option>'; // Reset options
+
+                cars.forEach(car => {
+                    const option = document.createElement('option');
+                    option.value = car.car_id;
+                    option.textContent = car.plate_id;
+                    carSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error(error);
+                alert('Could not load cars.');
+            }
+        }
+
+        // Fetch and populate customer options
+        async function fetchCustomers() {
+            try {
+                const res = await fetch(API_CUSTOMERS);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch customers.');
+                }
+                const customers = await res.json();
+                const customerSelect = document.querySelector('#customer_id');
+                customerSelect.innerHTML = '<option value="" disabled selected>Select Customer</option>'; // Reset options
+
+                customers.forEach(customer => {
+                    const option = document.createElement('option');
+                    option.value = customer.customer_id;
+                    option.textContent = customer.name;
+                    customerSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error(error);
+                alert('Could not load customers.');
+            }
+        }
+
+        // Add a new reservation
+        document.querySelector('#add-reservation-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const car_id = document.querySelector('#car_id').value;
+            const customer_id = document.querySelector('#customer_id').value;
+            const pickup_date = document.querySelector('#pickup_date').value;
+            const return_date = document.querySelector('#return_date').value;
+
+            try {
+                const res = await fetch(API_RESERVATIONS, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ car_id, customer_id, pickup_date, return_date }),
+                });
+
+                if (!res.ok) {
+                    throw new Error('Failed to add reservation.');
+                }
+
+                alert('Reservation added successfully!');
+                fetchReservations(); // Reload reservations table
+            } catch (error) {
+                console.error(error);
+                alert('Could not add reservation.');
+            }
+        });
+
+        // Delete a reservation
+        async function deleteReservation(reservationId) {
+            if (!confirm('Are you sure you want to delete this reservation?')) {
+                return;
+            }
+
+            try {
+                const res = await fetch(`/admin${API_RESERVATIONS}/${reservationId}`, {
+                    method: 'DELETE',
+                });
+
+                if (!res.ok) {
+                    throw new Error('Failed to delete reservation.');
+                }
+
+                alert('Reservation deleted successfully!');
+                fetchReservations(); // Reload reservations table
+            } catch (error) {
+                console.error(error);
+                alert('Could not delete reservation.');
+            }
+        }
+
+        // Load reservations, cars, and customers on page load
+        fetchReservations();
+        fetchCars();
+        fetchCustomers();
+    </script>
+</body>
+</html>

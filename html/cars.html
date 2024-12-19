@@ -40,6 +40,7 @@
                 <th>Year</th>
                 <th>Plate ID</th>
                 <th>Status</th>
+                <th>Price</th>
                 <th>Office</th>
                 <th>Actions</th>
             </tr>
@@ -55,6 +56,7 @@
         <input type="text" id="model" placeholder="Model" required>
         <input type="number" id="year" placeholder="Year" required>
         <input type="text" id="plate_id" placeholder="Plate ID" required>
+        <input type="number" id="price" placeholder="Price" required>
         <select id="status" required>
             <option value="active">Active</option>
             <option value="out_of_service">Out of Service</option>
@@ -91,7 +93,8 @@
                         <td>${car.year}</td>
                         <td>${car.plate_id}</td>
                         <td>${car.status}</td>
-                        <td>${car.office_name || 'N/A'}</td>
+                        <td>${car.price || 'N/A'}</td>
+                        <td>${car.office_id || 'N/A'}</td>
                         <td>
                             <button onclick="deleteCar(${car.car_id})">Delete</button>
                         </td>
@@ -134,16 +137,17 @@
             const model = document.querySelector('#model').value;
             const year = document.querySelector('#year').value;
             const plateId = document.querySelector('#plate_id').value;
+            const price = document.querySelector('#price').value;
             const status = document.querySelector('#status').value;
             const officeId = document.querySelector('#office_id').value;
 
             try {
-                const res = await fetch(API_CARS, {
+                const res = await fetch("/admin"+API_CARS, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ model, year, plateId, status, officeId }),
+                    body: JSON.stringify({ model, year, plateId, price, status, officeId }),
                 });
 
                 if (!res.ok) {

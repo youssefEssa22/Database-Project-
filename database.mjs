@@ -65,12 +65,12 @@ async function readCars(filters = {}, sortBy = "model") {
 }
 
 // Insert a new car
-async function addCar(model, year, plateId, status = "active", officeId) {
-  console.log(model, year, plateId, status, officeId);
+async function addCar(model, year, plateId, price, status = "active", officeId) {
+  console.log(model, year, plateId, price, status, officeId);
   try {
     await sql`
-      INSERT INTO cars (model, year, plate_id, status, office_id)
-      VALUES (${model}, ${year}, ${plateId}, ${status}, ${officeId})
+      INSERT INTO cars (model, year, plate_id, price, status, office_id)
+      VALUES (${model}, ${year}, ${plateId}, ${price}, ${status}, ${officeId})
     `;
   } catch (error) {
     console.error("Error in addCar:", error);

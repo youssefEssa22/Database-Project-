@@ -16,10 +16,10 @@ admin.delete("/customers/:id", async (req, res) => {
 });
 
 admin.post("/cars", async (req, res) => {
-    const { model, year, plateId, status, officeId } = req.body;
-    console.log(model, year, plateId, status, officeId);
+    const { model, year, plateId, price, status, officeId } = req.body;
+    console.log(model, year, plateId, price, status, officeId);
     try {
-      await addCar(model, year, plateId, status, officeId);
+      await addCar(model, year, plateId, price, status, officeId);
       res.status(201).json({ message: "Car added successfully!" });
     } catch (error) {
       console.error("Error in /admin/cars:", error);

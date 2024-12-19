@@ -24,6 +24,7 @@ CREATE TABLE cars (
     plate_id VARCHAR(50) UNIQUE NOT NULL,
     status car_status DEFAULT 'active',
     office_id INT,
+    price DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
     FOREIGN KEY (office_id) REFERENCES offices(office_id)
 );
 

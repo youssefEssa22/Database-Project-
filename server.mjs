@@ -5,13 +5,14 @@ import { fileURLToPath } from "url";
 import {
   addCustomer,
   readCars,
-  addCar,
-  deleteCar,
   addReservation,
   getCustomerReservations,
   getCustomer,
   getCustomers,
   getOffices,
+  createReservationAndPayment,
+  getCarById,
+  searchCars,
 } from "./database.mjs";
 import { admin } from "./routes/admin.mjs";
 
@@ -68,13 +69,42 @@ app.post("/login", async (req, res) => {
 
 // Route: List available cars with optional filters
 app.get("/cars", async (req, res) => {
-  const filters = req.query; // Use query parameters for filtering
   try {
     const cars = await readCars();
     res.json(cars);
   } catch (error) {
     console.error("Error in /cars:", error);
     res.status(500).json({ error: "Failed to fetch cars." });
+  }
+});
+
+app.get("/SearchCars", async (req, res) => {
+  const { start_date, end_date, model, office, order_by } = req.query;
+  try {
+    const cars = await searchCars(start_date, end_date, model, office, order_by);
+    res.json(cars);
+  } catch (error) {
+    console.error("Error in /searchCars:", error);
+    res.status(500).json({ error: "Failed to fetch cars." });
+  }
+
+});
+
+app.post("/rentCar", async (req, res) => {
+  const { car_id, start_date, end_date, email } = req.body;
+
+  try {
+      const days = Math.max(1, (new Date(end_date) - new Date(start_date)) / (1000 * 60 * 60 * 24));
+      const car = await getCarById(car_id); // Fetch car details
+      const amount = car[0].price * days;
+
+      // Create a reservation and payment record
+      await createReservationAndPayment(car_id, email, start_date, end_date, amount);
+
+      res.status(200).json({ message: "Car rented successfully!" });
+  } catch (error) {
+      console.error("Error renting car:", error);
+      res.status(500).json({ error: "Failed to rent car." });
   }
 });
 

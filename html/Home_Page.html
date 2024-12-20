@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
     <link rel="stylesheet" href="../css/Home_Page.css">
-    <script src="/js/Home_Page.js" defer></script>
     <script src="https://unpkg.com/scrollreval"></script>
-    <script src="/js/Home_Page.js" defer></script>
 </head>
  <body>
     
@@ -52,6 +50,48 @@
                 </div>
             </div>
             <img src="../Photos/Screenshot (158).png" class="hero-page-img" alt="img">
+        </div>
+
+        <form id="search-cars-form" style="margin-bottom: 20px;">
+            <label for="start-date" style="color: white;">Start Date:</label>
+            <input type="date" id="start-date">
+        
+            <label for="end-date" style="color: white;">End Date:</label>
+            <input type="date" id="end-date">
+        
+            <label for="model" style="color: white;">Model:</label>
+            <input type="text" id="model" placeholder="Model">
+        
+            <label for="office" style="color: white;">Office:</label>
+            <input type="text" id="office" placeholder="Office">
+        
+            <label for="order-by" style="color: white;">Order By:</label>
+            <select id="order-by">
+                <option value="">None</option>
+                <option value="price">Price</option>
+                <option value="model">Model</option>
+                <option value="year">Year</option>
+            </select>
+        
+            <button type="submit" class="btn-2">Search</button>
+        </form>
+
+        <div id="rent-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span id="close-btn" class="close-btn">&times;</span>
+                <h2>Rent a Car</h2>
+                <form id="rent-form">
+                    <input type="hidden" id="car-id" name="car_id">
+                    <label for="start-date">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate" required>
+                    <label for="end-date">End Date:</label>
+                    <input type="date" id="endDate" name="endDate" required>
+                    <p id="price-display" style="color: green;">Total Price: $0</p>
+                    <label for="email">Your Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <button type="submit" class="btn-2">Confirm Rental</button>
+                </form>
+            </div>
         </div>
 
         <!-- Collection States and Cars Showroom Lists in home page-->
@@ -155,5 +195,6 @@
         </footer>
 
     </div>
+    <script src="/js/Home_Page.js" defer></script>
  </body>
 </html>

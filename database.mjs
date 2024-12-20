@@ -49,10 +49,7 @@ async function deleteCustomer(id) {
 }
 
 // Read all available cars (with optional filters and sorting)
-async function readCars(filters = {}, sortBy = "model") {
-  const { model, year, status, officeId } = filters;
-  console.log(model, year, status, officeId);
-
+async function readCars() {
   try {
     const cars = await sql`
       SELECT * FROM cars
@@ -74,6 +71,88 @@ async function addCar(model, year, plateId, price, status = "active", officeId) 
     `;
   } catch (error) {
     console.error("Error in addCar:", error);
+    throw error;
+  }
+}
+
+async function getCarById(id) {
+  try {
+    const cars = await sql`
+      SELECT * FROM cars WHERE car_id = ${id}
+    `;
+    return cars;
+  } catch (error) {
+    console.error("Error in getCarsById:", error);
+    throw error;
+  }
+}
+
+async function searchCars(start_date, end_date, model, office, order_by) {
+  try {
+    // Base query
+    let query = `
+      SELECT cars.*, offices.name AS office_name
+      FROM cars
+      LEFT JOIN offices ON cars.office_id = offices.office_id
+      WHERE 1 = 1
+    `;
+
+    const conditions = [];
+    const params = [];
+
+    // Exclude cars reserved during the specified period
+    if (start_date) {
+      conditions.push(`
+        NOT EXISTS (
+          SELECT 1
+          FROM reservations
+          WHERE cars.car_id = reservations.car_id
+          AND $${params.length + 1} < reservations.return_date
+        )
+      `);
+      params.push(start_date);
+    }
+
+    if (end_date) {
+      conditions.push(`
+        NOT EXISTS (
+          SELECT 1
+          FROM reservations
+          WHERE cars.car_id = reservations.car_id
+          AND reservations.pickup_date < $${params.length + 1}
+        )
+      `);
+      params.push(end_date);
+    }
+
+    // Filter by model
+    if (model) {
+      conditions.push(`LOWER(cars.model) LIKE LOWER($${params.length + 1})`);
+      params.push(`%${model}%`);
+    }
+
+    // Filter by office
+    if (office) {
+      conditions.push(`LOWER(offices.name) LIKE LOWER($${params.length + 1})`);
+      params.push(`%${office}%`);
+    }
+
+    // Add all conditions to the query
+    if (conditions.length > 0) {
+      query += " AND " + conditions.join(" AND ");
+    }
+
+    // Order by valid columns
+    const validColumns = ["price", "model", "year"];
+    if (order_by && validColumns.includes(order_by)) {
+      query += ` ORDER BY ${order_by}`;
+    }
+
+    // Execute the query with parameters
+    const cars = await sql.unsafe(query, params);
+    return cars;
+  } catch (error) {
+    console.error("Error in searchCars:", error);
     throw error;
   }
 }
@@ -119,6 +198,55 @@ async function addOffice(name, location, phone) {
   } catch (error) {
     console.error("Error in aaddOffice:", error);
     throw error;
+  }
+}
+
+async function createReservationAndPayment(carId, email, startDate, endDate, amount) {
+  const sql = postgres(connectionString);
+
+  try {
+    // Begin a transaction
+    await sql.begin(async (transaction) => {
+      // Step 1: Find the customer ID based on the email
+      const customer = await transaction`
+        SELECT customer_id FROM customers WHERE email = ${email}
+      `;
+      if (customer.length === 0) {
+        throw new Error("Customer not found.");
+      }
+      const customerId = customer[0].customer_id;
+
+      // Step 2: Check if the car is already reserved during the specified period
+      const overlappingReservations = await transaction`
+        SELECT * FROM reservations
+        WHERE car_id = ${carId}
+          AND (
+            (pickup_date <= ${endDate} AND return_date >= ${startDate})
+          )
+      `;
+      if (overlappingReservations.length > 0) {
+        throw new Error("Car is already reserved during the specified period.");
+      }
+
+      // Step 3: Insert the reservation
+      const reservation = await transaction`
+        INSERT INTO reservations (car_id, customer_id, pickup_date, return_date)
+        VALUES (${carId}, ${customerId}, ${startDate}, ${endDate})
+        RETURNING reservation_id
+      `;
+      const reservationId = reservation[0].reservation_id;
+
+      // Step 4: Insert the payment
+      await transaction`
+        INSERT INTO payments (reservation_id, amount, payment_method)
+        VALUES (${reservationId}, ${amount}, 'credit_card')
+      `;
+    });
+
+    console.log("Reservation and payment created successfully.");
+  } catch (error) {
+    console.error("Error in createReservationAndPayment:", error);
+    throw error; // Transaction will automatically roll back
   }
 }
 
@@ -243,4 +371,7 @@ export {
   deleteOffice,
   addOffice,
   deleteReservation,
+  createReservationAndPayment,
+  getCarById,
+  searchCars
 };

@@ -29,6 +29,19 @@ async function getCustomer(email) {
   }
 }
 
+async function getCustomerById(id) {
+  try {
+    const customer = await sql`
+      SELECT * FROM customers WHERE customer_id = ${id}
+    `;
+    return customer;
+  } catch (error) {
+    console.error("Error in getCustomer:", error);
+    throw error;
+  }
+}
+
+
 async function getCustomers() {
   try {
     const customers = await sql`
@@ -374,5 +387,6 @@ export {
   deleteReservation,
   createReservationAndPayment,
   getCarById,
-  searchCars
+  searchCars,
+  getCustomerById
 };

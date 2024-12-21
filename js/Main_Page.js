@@ -32,7 +32,12 @@ login_form.addEventListener("submit", async (e) =>{
   const password = document.querySelector("#login_password").value
   // console.log(email)
   userInfo = await loginUser(email, password)
-  console.log(userInfo)
+
+  customerId = userInfo["customerId"];
+
+  localStorage.setItem('customerId', userInfo["customerId"]);
+
+  console.log(`logged in as customer with id ${customerId}`)
 });
 
 register_form.addEventListener("submit", (e)=> {

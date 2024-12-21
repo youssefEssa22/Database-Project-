@@ -13,6 +13,7 @@ import {
   createReservationAndPayment,
   getCarById,
   searchCars,
+  getCustomerById
 } from "./database.mjs";
 import { admin } from "./routes/admin.mjs";
 
@@ -148,6 +149,18 @@ app.get("/customers/:id/reservations", async (req, res) => {
   } catch (error) {
     console.error("Error in /customers/:id/reservations:", error);
     res.status(500).json({ error: "Failed to fetch reservations." });
+  }
+});
+
+app.post("/customer", async (req, res) => {
+  const { customerId } = req.body;
+  try {
+    const customer = await getCustomerById(customerId); 
+
+    res.json(customer)
+  } catch (error) {
+    console.error("Error in /customer:", error);
+    res.status(500).json({ error: "Failed to fetch customer info." });
   }
 });
 

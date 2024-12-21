@@ -12,7 +12,7 @@ const register_form = document.querySelector("#register_form")
 const login_form = document.querySelector("#login_form")
 
 async function loginUser(email, password) {
-  const response = fetch('/login', {
+  const response = await fetch('/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ async function loginUser(email, password) {
       password
     })});
 
-    userInfo = (await response).json();
+    userInfo = await response.json();
     return userInfo;
 }
 

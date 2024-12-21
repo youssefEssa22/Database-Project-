@@ -21,5 +21,5 @@
 ```
 cd Database-Project-
 npm install
-done server.js
+node server.js
 ```

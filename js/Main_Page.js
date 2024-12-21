@@ -11,17 +11,28 @@ loginlink.addEventListener('click',()=>{
 const register_form = document.querySelector("#register_form")
 const login_form = document.querySelector("#login_form")
 
-login_form.addEventListener("submit", (e) =>{
-  e.preventDefault()
-  const email = document.querySelector("#email").value
-  const password = document.querySelector("#password").value
-  fetch('/login', {
+async function loginUser(email, password) {
+  const response = fetch('/login', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({
       email,
       password
-    }),
-  }).then(response => response.json())
+    })});
+
+    userInfo = (await response).json();
+    return userInfo;
+}
+
+login_form.addEventListener("submit", async (e) =>{
+  e.preventDefault()
+  const email = document.querySelector("#login_email").value
+  const password = document.querySelector("#login_password").value
+  // console.log(email)
+  userInfo = await loginUser(email, password)
+  console.log(userInfo)
 });
 
 register_form.addEventListener("submit", (e)=> {
@@ -30,6 +41,8 @@ register_form.addEventListener("submit", (e)=> {
     const lname = document.querySelector("#lname").value
     const email = document.querySelector("#register_email").value
     const password = document.querySelector("#register_password").value
+    const phone = document.querySelector("#phone").value
+    const address = document.querySelector("#address").value
     const name = fname+ ' ' + lname
     console.log(fname, lname, email, password)
 
@@ -42,6 +55,8 @@ register_form.addEventListener("submit", (e)=> {
           name,
           email,
           password,
+          phone,
+          address
         }),
       }).then(response => response.json())
 });

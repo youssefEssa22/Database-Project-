@@ -47,9 +47,8 @@ app.post("/register", async (req, res) => {
 // Route: Login
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
   try {
-    const customers = await getCustomer({ email }); // Use a function to get customer by email
+    const customers = await getCustomer(email); // Use a function to get customer by email
     if (customers.length === 0) {
       return res.status(404).json({ error: "Customer not found." });
     }

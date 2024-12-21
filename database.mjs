@@ -19,9 +19,10 @@ async function addCustomer(name, email, passwordHash, phone, address) {
 
 async function getCustomer(email) {
   try {
-    await sql`
+    const customer = await sql`
       SELECT * FROM customers WHERE email = ${email}
     `;
+    return customer;
   } catch (error) {
     console.error("Error in getCustomer:", error);
     throw error;

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Cars - Car Rental System</title>
+    <link rel="stylesheet" href="../css/office-cars.css">
+</head>
+<body>
+    <div class="container">
+        <a href="offices.html" class="back-link">← Back to Offices</a>
+        
+        <div class="header">
+            <h1 id="office-title">Available Cars</h1>
+            <p>Find and reserve your perfect car</p>
+        </div>
+
+        <div class="search-section">
+            <input type="text" class="search-input" placeholder="Search by model, year, or features...">
+            <select class="filter-select">
+                <option value="all">All Cars</option>
+                <option value="available">Available Only</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="year-new">Year: Newest First</option>
+            </select>
+        </div>
+
+        <div class="cars-grid">
+            <!-- Example Car Cards -->
+            <div class="car-card">
+                <img src="https://via.placeholder.com/300x200" alt="Toyota Camry" class="car-image">
+                <span class="car-status status-available">Available</span>
+                <h2 class="car-name">Toyota Camry 2023</h2>
+                <p class="car-details">
+                    <strong>Year:</strong> 2023<br>
+                    <strong>Mileage:</strong> 15,000 km<br>
+                    <strong>Transmission:</strong> Automatic<br>
+                    <strong>Fuel Type:</strong> Petrol
+                </p>
+                <p class="car-price">$75/day</p>
+                <button class="reserve-button">Reserve Now</button>
+            </div>
+
+            <div class="car-card">
+                <img src="https://via.placeholder.com/300x200" alt="BMW 3 Series" class="car-image">
+                <span class="car-status status-rented">Rented</span>
+                <h2 class="car-name">BMW 3 Series 2023</h2>
+                <p class="car-details">
+                    <strong>Year:</strong> 2023<br>
+                    <strong>Mileage:</strong> 8,000 km<br>
+                    <strong>Transmission:</strong> Automatic<br>
+                    <strong>Fuel Type:</strong> Petrol
+                </p>
+                <p class="car-price">$120/day</p>
+                <button class="reserve-button" disabled>Currently Rented</button>
+            </div>
+
+            <div class="car-card">
+                <img src="https://via.placeholder.com/300x200" alt="Mercedes-Benz E-Class" class="car-image">
+                <span class="car-status status-maintenance">Maintenance</span>
+                <h2 class="car-name">Mercedes-Benz E-Class 2022</h2>
+                <p class="car-details">
+                    <strong>Year:</strong> 2022<br>
+                    <strong>Mileage:</strong> 25,000 km<br>
+                    <strong>Transmission:</strong> Automatic<br>
+                    <strong>Fuel Type:</strong> Petrol
+                </p>
+                <p class="car-price">$150/day</p>
+                <button class="reserve-button" disabled>Under Maintenance</button>
+            </div>
+        </div>
+    </div>
+    <script src="../js/office-cars.js"></script>
+</body>
+</html>

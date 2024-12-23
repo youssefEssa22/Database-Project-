@@ -21,8 +21,11 @@ async function getCustomerInfo() {
   }
 
 async function showCustomerInfo() {
+    if (!customerId || customerId === "undefined") {
+      customer_name.textContent = "Guest";
+      return;
+    }
     const customerInfo = await getCustomerInfo();
-    console.log(customerInfo);
     customer_name.textContent = customerInfo["name"];
     customer_email.textContent = customerInfo["email"];
     customer_phone.textContent = customerInfo["phone"];

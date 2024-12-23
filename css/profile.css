@@ -11,7 +11,7 @@ body{
     background: #000;
   
 }
-.admin_Page{
+.profile_Page{
     background: url(../Photos/Screenshot\ \(162\).png) no-repeat;
     background-position: center;
     background-size:cover ;
@@ -58,7 +58,7 @@ body{
     opacity: 1;
 }
 
-.admin {
+.profile {
     display: flex;
     flex-direction: column;
     color: white;

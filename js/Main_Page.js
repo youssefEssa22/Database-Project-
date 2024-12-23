@@ -34,10 +34,16 @@ login_form.addEventListener("submit", async (e) =>{
   userInfo = await loginUser(email, password)
 
   customerId = userInfo["customerId"];
+  console.log(customerId)
+  if (!customerId || customerId === "undefined") {
+    window.location.href = "./redirection.html?status=failure";
+    return;
+  }
 
-  localStorage.setItem('customerId', userInfo["customerId"]);
+  localStorage.setItem('customerId', customerId);
 
   console.log(`logged in as customer with id ${customerId}`)
+  window.location.href = "./redirection.html?status=success";
 });
 
 register_form.addEventListener("submit", (e)=> {

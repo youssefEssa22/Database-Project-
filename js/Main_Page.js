@@ -31,10 +31,9 @@ login_form.addEventListener("submit", async (e) =>{
   const email = document.querySelector("#login_email").value
   const password = document.querySelector("#login_password").value
   // console.log(email)
-  userInfo = await loginUser(email, password)
+  const userInfo = await loginUser(email, password)
 
   customerId = userInfo["customerId"];
-  console.log(customerId)
   if (!customerId || customerId === "undefined") {
     window.location.href = "./redirection.html?status=failure";
     return;
@@ -46,7 +45,7 @@ login_form.addEventListener("submit", async (e) =>{
   window.location.href = "./redirection.html?status=success";
 });
 
-register_form.addEventListener("submit", (e)=> {
+register_form.addEventListener("submit", async (e)=> {
     e.preventDefault()
     const fname = document.querySelector("#fname").value
     const lname = document.querySelector("#lname").value
@@ -57,7 +56,7 @@ register_form.addEventListener("submit", (e)=> {
     const name = fname+ ' ' + lname
     console.log(fname, lname, email, password)
 
-    fetch('/register', {
+    const registerResponse = await fetch('/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,6 +68,15 @@ register_form.addEventListener("submit", (e)=> {
           phone,
           address
         }),
-      }).then(response => response.json())
+      })
+
+      await registerResponse.json();
+
+      const userInfo = await loginUser(email, password);
+      console.log(userInfo)
+      const customerId = userInfo["customerId"];
+
+      localStorage.setItem('customerId', customerId);
+      window.location.href = "./redirection.html?status=successRegister";
 });
 

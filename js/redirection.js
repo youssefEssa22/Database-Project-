@@ -13,7 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (status === "failure") {
 
       infoElement.textContent = "Login Failed, please make sure you entered the correct email and password.";
-    } else {
+    }
+    else if (status === "successRegister") {
+      infoElement.textContent = "Registered successfully, redirecting...";
+      setTimeout(() => {
+        window.location.href = "../html/Home_Page.html";
+      }, 3000);
+    }
+    else {
       infoElement.textContent = "Unknown params";
     }
   });

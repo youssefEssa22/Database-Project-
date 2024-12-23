@@ -1,3 +1,29 @@
+const customerId = localStorage.getItem('customerId');
+
+async function getCustomerInfo() {
+    if (!customerId || customerId === "undefined") {
+        alert("Please login first");
+        window.location.href = "./Main_Page.html";
+        return;
+      }
+    const response = await fetch('/customer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        customerId
+      })});
+  
+      const customerInfo = await response.json();
+      return customerInfo[0];
+  }
+
+let email;
+getCustomerInfo().then(userInfo => {
+    email = userInfo["email"];
+});
+
 async function getCars() {
     res = await fetch("/cars")
     cars = await res.json()
@@ -130,7 +156,6 @@ function openRentModal(car_id, pricePerDay) {
 
     document.getElementById("rent-form").onsubmit = async (e) => {
         e.preventDefault();
-        const email = document.getElementById("email").value;
         const startDate = startDateInput.value;
         const endDate = endDateInput.value;
 

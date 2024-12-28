@@ -367,6 +367,36 @@ async function addPayment(reservationId, amount, paymentMethod = "credit_card") 
   }
 }
 
+
+async function readCustomerCars(customerId) {
+  try {
+    const cars = await sql`
+      SELECT c.*, r.reservation_id
+      FROM cars c
+      JOIN reservations r ON c.car_id = r.car_id
+      WHERE r.customer_id = ${customerId} AND r.return_date > CURRENT_DATE
+    `;
+    return cars;
+  } catch (error) {
+    console.error("Error in readCustomerCars:", error);
+    throw error;
+  }
+}
+
+async function returnCar(reservation_id) {
+  try {
+    await sql`
+      UPDATE reservations
+      SET return_date = current_date
+      WHERE reservation_id = ${reservation_id}
+    `;
+  } catch (error) {
+    console.error("Error in returnCar:", error);
+    throw error;
+  }
+}
+
+
 export {
   addCustomer,
   readCars,
@@ -388,5 +418,7 @@ export {
   createReservationAndPayment,
   getCarById,
   searchCars,
-  getCustomerById
+  getCustomerById,
+  readCustomerCars,
+  returnCar,
 };

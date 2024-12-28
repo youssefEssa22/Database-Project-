@@ -13,7 +13,9 @@ import {
   createReservationAndPayment,
   getCarById,
   searchCars,
-  getCustomerById
+  getCustomerById,
+  readCustomerCars,
+  returnCar,
 } from "./database.mjs";
 import { admin } from "./routes/admin.mjs";
 
@@ -74,6 +76,17 @@ app.get("/cars", async (req, res) => {
     res.json(cars);
   } catch (error) {
     console.error("Error in /cars:", error);
+    res.status(500).json({ error: "Failed to fetch cars." });
+  }
+});
+
+app.post("/customerCars", async (req, res) => {
+  try {
+    const { customerId } = req.body;
+    const cars = await readCustomerCars(customerId);
+    res.json(cars);
+  } catch (error) {
+    console.error("Error in /customerCars:", error);
     res.status(500).json({ error: "Failed to fetch cars." });
   }
 });
@@ -161,6 +174,17 @@ app.post("/customer", async (req, res) => {
   } catch (error) {
     console.error("Error in /customer:", error);
     res.status(500).json({ error: "Failed to fetch customer info." });
+  }
+});
+
+app.post("/returnCar", async (req, res) => {
+  try {
+    const { reservation_id } = req.body;
+    await returnCar(reservation_id);
+    res.status(201).json({ message: "Car returned successfully!" });
+  } catch (error) {
+    console.error("Error in /returnCar:", error);
+    res.status(500).json({ error: "Failed to return a car." });
   }
 });
 

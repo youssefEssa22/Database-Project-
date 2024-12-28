@@ -65,14 +65,16 @@ body{
     margin-top: 110px;
 }
 
-.customer-container {
+.customer-container,
+.cars-container {
     background-color: #1E201E;
     margin: 0px 100px 0px 100px;
     border-radius: 30px;
 }
 
 .user-container,
-.user-info-container {
+.user-info-container,
+.cars-container {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -83,4 +85,117 @@ body{
 .user-info-container {
     flex-direction: column;
     align-items: flex-start;
+}
+
+.cars-container {
+    margin-top: 5em;
+    flex-wrap: wrap;
+}
+
+.collection-car-item {
+    width: 430px;
+    height: 500px;
+    background-color: rgb(210, 202, 202);
+    display: flex;
+    flex-direction: column;
+    border-radius: 32px;
+    filter: drop-shadow(5px , 5px , 10px , rgba(0,0,0,0.15));
+    transition: all 0.3 ease-out;
+    margin: 10px;
+}
+
+.car-location {
+    display: flex;
+}
+
+.car-location i {
+    font-size: 20px;
+}
+
+.car-location h6 {
+    font-size: 20px;
+}
+
+.btn-2 {
+    width: 160px;
+    height: 50px;
+    font-size: 20px;
+    background-color: #f72d7a;
+    border: 1px solid #f72d7a;
+    border-radius: 12px;
+    color: white;
+    transition: all ease-in-out 0.2s;
+    cursor: pointer;
+    filter: drop-shadow(5px 5px 10px rgba (0,0,0,0.2));
+}
+
+.btn:hover {
+    background-color: black;
+    filter: drop-shadow(5px 5px 10px rgba (0,0,0,0.2));
+}
+
+.btn-car {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 32px;
+    width: 172px;
+    height: 50px;
+    font-size: 16px;
+}
+
+.btn-car i {
+    font-size: 16px;
+}
+
+.btn-car:hover {
+    gap: 8px;
+}
+
+.car-info-container {
+    padding: 20px 30px 30px 30px;
+}
+
+.car-info-container h2 {
+    font-size: 32px;
+    margin-bottom: 33px;
+    margin-top: 5px;
+}
+
+.car-info ,
+.car-price ,
+.car-location {
+    display: flex;
+}
+
+.car-info {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.car-price {
+    gap: 4px;
+    text-align: center;
+}
+
+.car-price h5 {
+    font-size: 24px;
+}
+
+.car-price h6 {
+    font-size: 20px;
+    opacity: 0.6;
+}
+
+.car-location i {
+    font-size: 20px;
+}
+
+.car-location h6 {
+    font-size: 20px;
+}
+
+.collection-car-item img {
+    border-radius: 32px;
 }

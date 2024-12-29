@@ -60,10 +60,10 @@ admin.post("/cars", async (req, res) => {
     }
   })
   
-  admin.post("/offices", async (req, res) => {
-    const { name, location, phone } = req.body;
+  admin.post("/addOffice", async (req, res) => {
+    const { name, location, phone, region } = req.body;
     try {
-        await addOffice(name, location, phone);
+        await addOffice(name, location, phone, region);
         res.status(201).json({ message: "Office added successfully!" });
     } catch (error) {
         console.error("Error in /admin/offinces:", error);

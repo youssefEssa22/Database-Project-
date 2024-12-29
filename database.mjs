@@ -203,11 +203,11 @@ async function deleteOffice(id) {
   }
 }
 
-async function addOffice(name, location, phone) {
+async function addOffice(name, location, phone, region) {
   try {
     await sql`
-    INSERT INTO offices (name, location, phone)
-    VALUES (${name}, ${location}, ${phone})
+    INSERT INTO offices (name, location, phone, region)
+    VALUES (${name}, ${location}, ${phone}, ${region})
     `;
   } catch (error) {
     console.error("Error in aaddOffice:", error);

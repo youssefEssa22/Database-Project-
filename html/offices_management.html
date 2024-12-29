@@ -50,6 +50,12 @@
         <input type="text" id="name" placeholder="Name" required>
         <input type="text" id="location" placeholder="Location" required>
         <input type="text" id="phone" placeholder="Phone">
+        <select id="region" required>
+            <option value="" disabled selected>Select Region</option>
+            <option value="Middle East" selected>Middle East</option>
+            <option value="Europe" selected>Europe</option>
+            <option value="North America" selected>North America</option>
+        </select>
         <button type="submit">Add Office</button>
     </form>
 
@@ -74,6 +80,7 @@
                         <td>${office.name}</td>
                         <td>${office.location}</td>
                         <td>${office.phone || 'N/A'}</td>
+                        <td>${office.location || 'N/A'}</td>
                         <td>
                             <button onclick="deleteOffice(${office.office_id})">Delete</button>
                         </td>
@@ -92,14 +99,15 @@
             const name = document.querySelector('#name').value;
             const location = document.querySelector('#location').value;
             const phone = document.querySelector('#phone').value;
+            const region = document.querySelector('#region').value;
 
             try {
-                const res = await fetch(API_BASE, {
+                const res = await fetch("/admin/addOffice", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ name, location, phone }),
+                    body: JSON.stringify({ name, location, phone, region }),
                 });
 
                 if (!res.ok) {
@@ -120,7 +128,7 @@
             }
 
             try {
-                const res = await fetch(`${API_BASE}/${officeId}`, {
+                const res = await fetch(`/admin/${API_BASE}/${officeId}`, {
                     method: 'DELETE',
                 });
 

@@ -367,6 +367,29 @@ async function addPayment(reservationId, amount, paymentMethod = "credit_card") 
   }
 }
 
+async function getPayments(){
+  try {
+    const payments = await sql`
+      SELECT * FROM payments
+    `;
+    return payments;
+  } catch (error) {
+    console.error("Error in getPayments:", error);
+    throw error;
+  }
+}
+
+async function getReservations(){
+  try {
+    const reservations = await sql`
+      SELECT * FROM reservations
+    `;
+    return reservations;
+  } catch (error) {
+    console.error("Error in getReservations:", error);
+    throw error;
+  }
+}
 
 async function readCustomerCars(customerId) {
   try {
@@ -421,4 +444,6 @@ export {
   getCustomerById,
   readCustomerCars,
   returnCar,
+  getPayments,
+  getReservations
 };

@@ -16,6 +16,8 @@ import {
   getCustomerById,
   readCustomerCars,
   returnCar,
+  getReservations,
+  getPayments,
 } from "./database.mjs";
 import { admin } from "./routes/admin.mjs";
 
@@ -153,6 +155,25 @@ app.post("/reservations", async (req, res) => {
   }
 });
 
+app.get("/reservations", async (req, res) => {
+  try {
+    const reservations = await getReservations();
+    res.json(reservations);
+  } catch (error) {
+    console.error("Error in /reservations:", error);
+    res.status(500).json({ error: "Failed to fetch reservations." });
+  }
+});
+
+app.get("payments", async (req, res) => {
+  try {
+    const payments = await getPayments();
+    res.json(payments);
+  } catch (error) {
+    console.error("Error in /payments:", error);
+    res.status(500).json({ error: "Failed to fetch payments." });
+  }
+});
 // Route: Get reservations for a customer
 app.get("/customers/:id/reservations", async (req, res) => {
   const customerId = req.params.id;

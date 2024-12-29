@@ -2,6 +2,8 @@ import { Router } from "express";
 import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation } from "../database.mjs";
 const admin = Router();
 
+admin.get("/", async (req, res) => res.redirect("/html/Administration.html"));
+
 admin.delete("/customers/:id", async (req, res) => {
     const customerId = req.params.id;
     try{

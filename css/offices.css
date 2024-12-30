@@ -59,30 +59,28 @@ body {
 .offices-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    gap: 25px;
 }
 
 .office-card {
     background-color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-    cursor: pointer;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
     text-decoration: none;
-    display: block;
 }
 
 .office-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .office-name {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
+    font-family: 'Georgia', serif;
+    color: #2a3f5f;
+    font-size: 1.3em;
+    margin-bottom: 15px;
 }
 
 .office-address {

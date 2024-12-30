@@ -86,7 +86,7 @@
 
                     row.innerHTML = `
                         <td>${reservation.reservation_id}</td>
-                        <td>${reservation.plate_id || 'N/A'}</td>
+                        <td>${reservation.car_id || 'N/A'}</td>
                         <td>${reservation.customer_id || 'N/A'}</td>
                         <td>${new Date(reservation.reservation_date).toLocaleString()}</td>
                         <td>${new Date(reservation.pickup_date).toLocaleString()}</td>

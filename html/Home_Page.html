@@ -63,7 +63,10 @@
             <input type="text" id="model" placeholder="Model">
         
             <label for="office" style="color: white;">Office:</label>
-            <input type="text" id="office" placeholder="Office">
+            <select id="office" required>
+                <option value="" disabled selected>Select Office</option>
+                <!-- will be filled from the db  -->
+            </select>
         
             <label for="order-by" style="color: white;">Order By:</label>
             <select id="order-by">

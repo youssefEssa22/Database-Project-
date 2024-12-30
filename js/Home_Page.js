@@ -191,5 +191,28 @@ async function showCars(cars = null) {
         container.appendChild(carElement);
     });
 }
-console.log("t")
+
+
+async function populateOfficeOptions() {
+    try {
+        const res = await fetch("/offices");
+        if (!res.ok) {
+            throw new Error('Failed to fetch offices.');
+        }
+        const offices = await res.json();
+        console.log(offices)
+        const officeSelect = document.querySelector('#office');
+        offices.forEach(office => {
+            const option = document.createElement('option');
+            option.value = office.name;
+            option.textContent = office.name;
+            officeSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error(error);
+        alert('Could not load offices.');
+    }
+}
+
+populateOfficeOptions()
 showCars()

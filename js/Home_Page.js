@@ -144,6 +144,9 @@ function openRentModal(car_id, pricePerDay) {
     const endDateInput = document.getElementById("endDate");
     const priceDisplay = document.getElementById("price-display");
 
+    const today = new Date().toISOString().split('T')[0];
+    startDateInput.setAttribute('min', today);
+    
     carIdInput.value = car_id;
     startDateInput.value = new Date().toISOString().split("T")[0];
     endDateInput.value = new Date().toISOString().split("T")[0];
@@ -156,7 +159,25 @@ function openRentModal(car_id, pricePerDay) {
         priceDisplay.textContent = `Total Price: $${(days * pricePerDay).toFixed(2)}`;
     };
 
-    startDateInput.onchange = calculatePrice;
+    function update_min_date() {
+            const minEndDate = new Date(startDateInput.value);
+            minEndDate.setDate(minEndDate.getDate() + 1);
+            const formattedEndDate = minEndDate.toISOString().split('T')[0];
+            console.log("formatted:", formattedEndDate)
+            endDateInput.setAttribute('min', formattedEndDate);
+    }
+
+    update_min_date();
+    endDateInput.value = endDateInput.getAttribute("min");
+
+    startDateInput.onchange = () => {
+        calculatePrice();
+        update_min_date();
+
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+        if (endDate <= startDate) endDateInput.value = endDateInput.getAttribute("min");
+    }
     endDateInput.onchange = calculatePrice;
 
     document.getElementById("close-btn").onclick = () => {

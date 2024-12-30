@@ -82,9 +82,27 @@
                             </p>
                         </div>
                     </a>
+                    <h4></h4>
                 </div>
             </div>
         </section>
     </div>
+    <script>
+        async function getTotalRev() {
+            try {
+                const res = await fetch('/total_revenue');
+                if (!res.ok) {
+                    throw new Error('Failed to fetch cars.');
+                }
+                const totalRevenue = await res.json();
+                const totalRev = document.querySelector('h4');
+                totalRev.innerHTML = `Total Revenue: ${totalRevenue[0].total_revenue}`;
+            } catch (error) {
+                console.error(error);
+                alert('Could not load total revenue.');
+            }
+        }
+        getTotalRev();
+    </script>
  </body>
 </html>

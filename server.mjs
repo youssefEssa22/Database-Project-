@@ -18,6 +18,7 @@ import {
   returnCar,
   getReservations,
   getPayments,
+  getTotalRevenue,
 } from "./database.mjs";
 import { admin } from "./routes/admin.mjs";
 
@@ -90,6 +91,16 @@ app.post("/customerCars", async (req, res) => {
   } catch (error) {
     console.error("Error in /customerCars:", error);
     res.status(500).json({ error: "Failed to fetch cars." });
+  }
+});
+
+app.get('/total_revenue', async (req, res) => {
+  try {
+    const totalRevenue = await getTotalRevenue();
+    res.json(totalRevenue);
+  } catch (error) {
+    console.error("Error in /total_revenue:", error);
+    res.status(500).json({ error: "Failed to fetch total revenue." });
   }
 });
 

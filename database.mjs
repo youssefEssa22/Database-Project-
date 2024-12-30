@@ -406,6 +406,19 @@ async function readCustomerCars(customerId) {
   }
 }
 
+async function getTotalRevenue() {
+  try {
+    const revenue = await sql`
+      SELECT SUM(amount) AS total_revenue
+      FROM payments WHERE amount IS NOT NULL
+    `;
+    return revenue;
+  } catch (error) {
+    console.error("Error in totalRevenue:", error);
+    throw error;
+  }
+}
+
 async function returnCar(reservation_id) {
   try {
     await sql`
@@ -445,5 +458,6 @@ export {
   readCustomerCars,
   returnCar,
   getPayments,
-  getReservations
+  getReservations,
+  getTotalRevenue
 };

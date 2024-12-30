@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation } from "../database.mjs";
+import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation, getPayments } from "../database.mjs";
 const admin = Router();
 
 admin.get("/", async (req, res) => res.redirect("/html/Administration.html"));
@@ -35,6 +35,16 @@ admin.post("/cars", async (req, res) => {
     } catch (error) {
       console.error("Error in /admin/cars/:id:", error);
       res.status(500).json({ error: "Failed to delete car." });
+    }
+  });
+
+  admin.get("/payments", async (req, res) => {
+    try {
+      const payments = await getPayments();
+      res.json(payments);
+    } catch (error) {
+      console.error("Error in /payments:", error);
+      res.status(500).json({ error: "Failed to fetch payments." });
     }
   });
 

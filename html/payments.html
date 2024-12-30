@@ -51,9 +51,6 @@
         async function fetchPayments() {
             try {
                 const res = await fetch(API_PAYMENTS);
-                if (!res.ok) {
-                    throw new Error('Failed to fetch payments.');
-                }
                 const payments = await res.json();
                 const tableBody = document.querySelector('#payments-table tbody');
                 tableBody.innerHTML = ''; // Clear existing rows
@@ -64,7 +61,7 @@
                     row.innerHTML = `
                         <td>${payment.payment_id}</td>
                         <td>${payment.reservation_id}</td>
-                        <td>$${payment.amount.toFixed(2)}</td>
+                        <td>$${parseInt(payment.amount).toFixed(2)}</td>
                         <td>${new Date(payment.payment_date).toLocaleString()}</td>
                         <td>${payment.payment_method}</td>
                         <td>

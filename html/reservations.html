@@ -15,7 +15,7 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Car</th>
+                <th>Car ID</th>
                 <th>Customer</th>
                 <th>Reservation Date</th>
                 <th>Pickup Date</th>
@@ -65,7 +65,7 @@
 
                     row.innerHTML = `
                         <td>${reservation.reservation_id}</td>
-                        <td>${reservation.plate_id || 'N/A'}</td>
+                        <td>${reservation.car_id}</td>
                         <td>${reservation.customer_id || 'N/A'}</td>
                         <td>${new Date(reservation.reservation_date).toLocaleString()}</td>
                         <td>${new Date(reservation.pickup_date).toLocaleString()}</td>

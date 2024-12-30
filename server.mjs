@@ -18,6 +18,7 @@ import {
   returnCar,
   getReservations,
   getPayments,
+  getRegions,
 } from "./database.mjs";
 import { admin } from "./routes/admin.mjs";
 
@@ -208,6 +209,16 @@ app.post("/returnCar", async (req, res) => {
     res.status(500).json({ error: "Failed to return a car." });
   }
 });
+
+app.get("/regions", async (req, res) => { 
+  try {
+    const regions = await getRegions();
+    res.json(regions);
+  } catch (error) {
+    console.error("Error in /regions:", error);
+    res.status(500).json({ error: "Failed to fetch regions." });
+  }
+})
 
 app.get("/", (req, res) => {
   res.redirect("/html/Main_Page.html");

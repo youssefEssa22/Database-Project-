@@ -419,6 +419,21 @@ async function returnCar(reservation_id) {
   }
 }
 
+async function getRegions() {
+  try {
+    const regions = await sql`
+      SELECT  unnest(regexp_matches(pg_get_constraintdef(oid), '''(.*?)''', 'g')) AS region_name
+      FROM   pg_catalog.pg_constraint
+      WHERE  contype  = 'c'
+      AND    conrelid = 'offices'::regclass
+      AND    conname = 'offices_region_check';
+    `;
+    return regions;
+  } catch (error) {
+    console.error("Error in getRegions:", error);
+    throw error;
+  }
+}
 
 export {
   addCustomer,
@@ -445,5 +460,6 @@ export {
   readCustomerCars,
   returnCar,
   getPayments,
-  getReservations
+  getReservations,
+  getRegions,
 };

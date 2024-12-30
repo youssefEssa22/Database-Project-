@@ -52,9 +52,7 @@
         <input type="text" id="phone" placeholder="Phone">
         <select id="region" required>
             <option value="" disabled selected>Select Region</option>
-            <option value="Middle East" selected>Middle East</option>
-            <option value="Europe" selected>Europe</option>
-            <option value="North America" selected>North America</option>
+            <!-- will be filled from the db constraint  -->
         </select>
         <button type="submit">Add Office</button>
     </form>
@@ -122,6 +120,27 @@
             }
         });
 
+        async function populateRegionOptions() {
+            try {
+                const res = await fetch("/regions");
+                if (!res.ok) {
+                    throw new Error('Failed to fetch regions.');
+                }
+                const regions = await res.json();
+                console.log(regions)
+                const regionSelect = document.querySelector('#region');
+                regions.forEach(region => {
+                    const option = document.createElement('option');
+                    option.value = region.region_name;
+                    option.textContent = region.region_name;
+                    regionSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error(error);
+                alert('Could not load regions.');
+            }
+        }
+
         async function deleteOffice(officeId) {
             if (!confirm('Are you sure you want to delete this office?')) {
                 return;
@@ -144,6 +163,7 @@
             }
         }
         fetchOffices();
+        populateRegionOptions()
     </script>
 </body>
 </html>

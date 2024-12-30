@@ -70,7 +70,7 @@
     }
 
     button {
-        background-color: #2a3f5f; /* Deep navy blue */
+        background-color: #dc3545; /* Dark red */
         color: #fff;
         cursor: pointer;
         font-weight: 600;
@@ -79,7 +79,7 @@
     }
 
     button:hover {
-        background-color: #1a2a40; /* Darker navy blue */
+          background-color: #c82333; /* Darker red */
         transform: translateY(-2px);
     }
 

@@ -1,0 +1,163 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.8;
+    margin: 0;
+    padding: 30px;
+    background-color: #fafafa;
+    color: #333;
+}
+
+h1 {
+    font-family: 'Georgia', serif;
+    color: #2a3f5f;
+    font-size: 2.8em;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+h2 {
+    font-family: 'Georgia', serif;
+    color: #2a3f5f;
+    font-size: 2.2em;
+    margin-bottom: 20px;
+}
+
+/* Table Styles */
+#reservations-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0 40px 0;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#reservations-table th {
+    background-color: #2a3f5f;
+    color: #fff;
+    font-weight: 600;
+    padding: 15px;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#reservations-table td {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#reservations-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#reservations-table tr:hover {
+    background-color: #f1f1f1;
+    transition: background-color 0.3s ease;
+}
+
+#reservations-table button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#reservations-table button:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+/* Form Styles */
+#add-reservation-form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#add-reservation-form select,
+#add-reservation-form input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+#add-reservation-form select:focus,
+#add-reservation-form input:focus {
+    border-color: #2a3f5f;
+    outline: none;
+    box-shadow: 0 0 8px rgba(42, 63, 95, 0.2);
+}
+
+#add-reservation-form button {
+    width: 100%;
+    background-color: #2a3f5f;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+#add-reservation-form button:hover {
+    background-color: #1a2a40;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    #reservations-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    #add-reservation-form {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.8em;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#reservations-table,
+#add-reservation-form {
+    animation: fadeIn 0.5s ease-out;
+}

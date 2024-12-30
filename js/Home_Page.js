@@ -117,11 +117,21 @@ function createCarElement(model_name, price, office, car_id, car_status) {
     h2.textContent = model_name;
 
     inner_container_div.appendChild(h2);
-    const button = document.createElement("button");
-    button.classList.add("btn-2", "btn-car");
-    button.textContent = "Rent Now";
-    button.onclick = () => openRentModal(car_id, price);
-    inner_container_div.appendChild(button);
+
+    if (car_status === "out_of_service") {
+        const carStatusIndicator = document.createElement("h3");
+        carStatusIndicator.textContent = "OUT OF SERVICE";
+        inner_container_div.appendChild(carStatusIndicator);
+
+    }
+    else {
+        const button = document.createElement("button");
+        button.classList.add("btn-2", "btn-car");
+        button.textContent = "Rent Now";
+        button.onclick = () => openRentModal(car_id, price);
+        inner_container_div.appendChild(button);
+    }
+
     outer_container_div.appendChild(inner_container_div);
     return outer_container_div;
 }

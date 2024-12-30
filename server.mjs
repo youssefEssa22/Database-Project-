@@ -177,15 +177,6 @@ app.get("/reservations", async (req, res) => {
   }
 });
 
-app.get("payments", async (req, res) => {
-  try {
-    const payments = await getPayments();
-    res.json(payments);
-  } catch (error) {
-    console.error("Error in /payments:", error);
-    res.status(500).json({ error: "Failed to fetch payments." });
-  }
-});
 // Route: Get reservations for a customer
 app.get("/customers/:id/reservations", async (req, res) => {
   const customerId = req.params.id;

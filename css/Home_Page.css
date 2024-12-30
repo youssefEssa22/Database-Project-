@@ -503,3 +503,31 @@ footer {
 .social-item:hover {
     background-color: #f72d7a;
 }
+
+#search-cars-form {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #f72d7a;
+    padding: 1em;
+    border-radius: 2em;
+    margin: 1em;
+}
+
+#search-cars-form > button {
+    background-color: white;
+    color: #f72d7a;
+}
+
+#search-cars-form > button:hover {
+    background-color: #f72d7a;
+    color: white;
+    border-color: white;
+}
+
+#search-cars-form > input,select {
+    text-align: center;
+    border-radius: 1em;
+    
+    border: 0px;
+}

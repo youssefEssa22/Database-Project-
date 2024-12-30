@@ -49,3 +49,38 @@ CREATE TABLE payments (
     payment_method  method DEFAULT 'credit_card',
     FOREIGN KEY (reservation_id) REFERENCES reservations(reservation_id)
 );
+
+CREATE OR REPLACE FUNCTION delete_cars_on_office_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM cars WHERE office_id = OLD.office_id;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_delete_cars_on_office_delete
+AFTER DELETE ON offices
+FOR EACH ROW
+EXECUTE FUNCTION delete_cars_on_office_delete();
+
+
+CREATE OR REPLACE FUNCTION delete_reservations_and_payments_on_car_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Delete payments associated with reservations for the car
+    DELETE FROM payments
+    WHERE reservation_id IN (
+        SELECT reservation_id FROM reservations WHERE car_id = OLD.car_id
+    );
+
+    -- Delete reservations for the car
+    DELETE FROM reservations WHERE car_id = OLD.car_id;
+    
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_delete_reservations_and_payments_on_car_delete
+AFTER DELETE ON cars
+FOR EACH ROW
+EXECUTE FUNCTION delete_reservations_and_payments_on_car_delete();

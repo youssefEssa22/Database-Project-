@@ -27,6 +27,7 @@ getCustomerInfo().then(userInfo => {
 async function getCars() {
     res = await fetch("/cars")
     cars = await res.json()
+    console.log(cars)
     return cars
 }
 
@@ -72,7 +73,7 @@ document.querySelector("#search-cars-form").addEventListener("submit", async (e)
 });
 
 
-function createCarElement(model_name, price, office, car_id) {
+function createCarElement(model_name, price, office, car_id, car_status) {
     const outer_container_div = document.createElement("div");
     outer_container_div.classList.add("collection-car-item");
 
@@ -115,12 +116,20 @@ function createCarElement(model_name, price, office, car_id) {
     const h2 = document.createElement("h2");
     h2.textContent = model_name;
 
-    const button = document.createElement("button");
-    button.classList.add("btn-2", "btn-car");
-    button.textContent = "Rent Now";
-    button.onclick = () => openRentModal(car_id, price);
     inner_container_div.appendChild(h2);
-    inner_container_div.appendChild(button);
+
+    if (car_status === "active") {
+        const button = document.createElement("button");
+        button.classList.add("btn-2", "btn-car");
+        button.textContent = "Rent Now";
+        button.onclick = () => openRentModal(car_id, price);
+        inner_container_div.appendChild(button);
+    }
+    else {
+        const carStatusIndicator = document.createElement("h3");
+        carStatusIndicator.textContent = "Unavailable";
+        inner_container_div.appendChild(carStatusIndicator);
+    }
 
     outer_container_div.appendChild(inner_container_div);
     return outer_container_div;
@@ -187,7 +196,7 @@ async function showCars(cars = null) {
         cars = await getCars();   
     }
     cars.forEach(car => {
-        const carElement = createCarElement(car.model, car.price, car.office, car.car_id);
+        const carElement = createCarElement(car.model, car.price, car.office, car.car_id, car.status);
         container.appendChild(carElement);
     });
 }

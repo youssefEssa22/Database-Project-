@@ -288,18 +288,19 @@ async function deleteReservation(id) {
 }
 
 // Fetch all reservations within a specified period
-async function getReservationsWithinPeriod(startDate, endDate) {
+async function getReservationsFiltered(startDate, endDate, customer_id) {
   try {
     const reservations = await sql`
       SELECT r.*, c.model, c.plate_id, cu.name AS customer_name, cu.email AS customer_email
       FROM reservations r
       JOIN cars c ON r.car_id = c.car_id
       JOIN customers cu ON r.customer_id = cu.customer_id
-      WHERE r.reservation_date BETWEEN ${startDate} AND ${endDate}
+      ${customer_id ? sql`AND cu.customer_id = ${customer_id}` : sql``}
+      ${startDate && endDate ? sql`AND r.reservation_date BETWEEN ${startDate} AND ${endDate}` : sql``}
     `;
     return reservations;
   } catch (error) {
-    console.error("Error in getReservationsWithinPeriod:", error);
+    console.error("Error in getReservationsFiltered:", error);
     throw error;
   }
 }
@@ -457,7 +458,7 @@ export {
   addCar,
   deleteCar,
   addReservation,
-  getReservationsWithinPeriod,
+  getReservationsFiltered,
   getCarStatusByDay,
   getCustomerReservations,
   getDailyPayments,

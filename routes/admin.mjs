@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation, getPayments, getReservationsWithinPeriod } from "../database.mjs";
+import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation, getPayments, getReservationsFiltered } from "../database.mjs";
 const admin = Router();
 
 admin.get("/", async (req, res) => res.redirect("/html/Administration.html"));
@@ -93,10 +93,10 @@ admin.post("/cars", async (req, res) => {
     }
   })
 
-  admin.post("/reservationsWithinPeriod", async(req, res) => {
-    const {startDate, endDate} = req.body;
+  admin.post("/getReservationsFiltered", async(req, res) => {
+    const {startDate, endDate, customer_id} = req.body;
     try {
-      const reservations = await getReservationsWithinPeriod(startDate, endDate);
+      const reservations = await getReservationsFiltered(startDate, endDate, customer_id);
       res.json(reservations);
     } catch (error) {
       console.error("Error in /reservationsWithinPeriod:", error);

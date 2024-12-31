@@ -14,6 +14,10 @@
         <input type="date" id="startDate" name="startDate" required>
         <label for="end-date">End Date:</label>
         <input type="date" id="endDate" name="endDate" required>
+        <select id="customer-filter" required>
+            <option value="" disabled selected>Select Customer</option>
+            <!-- Customer options will be dynamically inserted here -->
+        </select>
     </form>
     <button id="reset-filters">Reset</button>
     <!-- Table to Display Reservations -->
@@ -56,23 +60,25 @@
 
     <script>
         const API_RESERVATIONS = '/reservations';
-        const API_RESERVATIONS_WITHIN_PERIOD = '/admin/reservationsWithinPeriod';
+        const API_RESERVATIONS_WITHIN_PERIOD = '/admin/getReservationsFiltered';
         const API_CARS = '/cars';
         const API_CUSTOMERS = '/customers';
 
-        const startDateInput = document.querySelector("#startDate")
-        const endDateInput = document.querySelector("#endDate")
+        const startDateInput = document.querySelector("#startDate");
+        const endDateInput = document.querySelector("#endDate");
+        const customerDropdown = document.querySelector("#customer-filter");
         // Fetch and display reservations
         async function fetchReservations() {
             try {
                 let res;
                 const startDate = startDateInput.value;
                 const endDate = endDateInput.value;
-                if (startDate && endDate) {
+                const customer_id = customerDropdown.value;
+                if ((startDate && endDate) || customer_id) {
                     res = await fetch(API_RESERVATIONS_WITHIN_PERIOD, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ startDate, endDate }),
+                        body: JSON.stringify({ startDate, endDate, customer_id }),
                     });
                 }
                 else {
@@ -135,6 +141,27 @@
             }
         }
 
+        async function fetchCustomersFilter() {
+            try {
+                const res = await fetch(API_CUSTOMERS);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch customers.');
+                }
+                const customers = await res.json();
+                const customerSelect = document.querySelector('#customer-filter');
+                customerSelect.innerHTML = '<option value="" disabled selected>Select Customer</option>'; // Reset options
+
+                customers.forEach(customer => {
+                    const option = document.createElement('option');
+                    option.value = customer.customer_id;
+                    option.textContent = customer.name;
+                    customerSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error(error);
+                alert('Could not load customers.');
+            }
+        }
         // Fetch and populate customer options
         async function fetchCustomers() {
             try {
@@ -215,14 +242,17 @@
         fetchReservations();
         fetchCars();
         fetchCustomers();
+        fetchCustomersFilter();
 
         startDateInput.addEventListener("change", fetchReservations);
         endDateInput.addEventListener("change", fetchReservations);
+        customerDropdown.addEventListener("change", fetchReservations);
 
         const resetFiltersButton = document.querySelector("#reset-filters");
         resetFiltersButton.addEventListener("click", () => {
             startDateInput.value = "";
             endDateInput.value = "";
+            customerDropdown.value= "";
             fetchReservations();
         })
     </script>

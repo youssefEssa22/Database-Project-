@@ -194,7 +194,7 @@
             const return_date = document.querySelector('#return_date').value;
 
             try {
-                const res = await fetch(API_RESERVATIONS, {
+                const res = await fetch("/admin/reservations", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

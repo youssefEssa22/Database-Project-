@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation, getPayments, getReservationsFiltered, getPaymentsWithinPeriod } from "../database.mjs";
+import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation, getPayments, getReservationsFiltered, getTotalPaymentAmount } from "../database.mjs";
 const admin = Router();
 
 admin.get("/", async (req, res) => res.redirect("/html/Administration.html"));
@@ -38,9 +38,10 @@ admin.post("/cars", async (req, res) => {
     }
   });
 
-  admin.get("/payments", async (req, res) => {
+  admin.post("/payments", async (req, res) => {
+    const {startDate, endDate} = req.body;
     try {
-      const payments = await getPayments();
+      const payments = await getPayments(startDate, endDate);
       res.json(payments);
     } catch (error) {
       console.error("Error in /payments:", error);
@@ -56,6 +57,17 @@ admin.post("/cars", async (req, res) => {
     } catch (error) {
       console.error("Error in /paymentsWithinPeriod:", error);
       res.status(500).json({ error: "Failed to fetch payments within period." });
+    }
+  });
+
+  admin.post("/totalPaymentsAmount", async (req, res) => {
+    try {
+      const {startDate, endDate} = req.body;
+      const total_amount = await getTotalPaymentAmount(startDate, endDate);
+      res.json(total_amount);
+    } catch (error) {
+      console.error("Error in /totalPaymentsAmount:", error);
+      res.status(500).json({ error: "Failed to fetch total payments amount." });
     }
   });
 

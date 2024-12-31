@@ -53,6 +53,7 @@
         const API_PAYMENTS = '/admin/payments';
         const API_RESERVATIONS = '/reservations';
         const API_PAYMENTS_WITHIN_PERIOD = "/admin/paymentsWithinPeriod";
+        const API_TOTAL_PAYMENTS_AMOUNT = "/admin/totalPaymentsAmount"
 
         const startDateInput = document.querySelector("#startDate");
         const endDateInput = document.querySelector("#endDate");
@@ -62,16 +63,12 @@
                 let res;
                 const startDate = startDateInput.value;
                 const endDate = endDateInput.value;
-                if (startDate && endDate) {
-                    res = await fetch(API_PAYMENTS_WITHIN_PERIOD, {
+                    res = await fetch(API_PAYMENTS, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ startDate, endDate }),
                     });
-                }
-                else {
-                    res = await fetch(API_PAYMENTS);
-                }
+
                 const payments = await res.json();
                 console.log(payments)
                 const tableBody = document.querySelector('#payments-table tbody');
@@ -93,6 +90,20 @@
 
                     tableBody.appendChild(row);
                 });
+
+                total_amount_res = await fetch(API_TOTAL_PAYMENTS_AMOUNT, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ startDate, endDate }),
+                    });
+
+                const total_amount = await total_amount_res.json();
+                const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>Total</td>
+                        <td colspan="5" style="text-align: center;">${total_amount[0].total_amount}</td>
+                    `;
+                    tableBody.appendChild(row);
             } catch (error) {
                 console.error(error);
                 alert('Could not load payments.');

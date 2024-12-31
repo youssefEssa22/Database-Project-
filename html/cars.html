@@ -65,7 +65,7 @@
 
                 cars.forEach(car => {
                     const row = document.createElement('tr');
-
+                    const selectorID = `${car.car_id}-edit`
                     row.innerHTML = `
                         <td>${car.car_id}</td>
                         <td>${car.model}</td>
@@ -75,6 +75,12 @@
                         <td>${car.price || 'N/A'}</td>
                         <td>${car.office_id || 'N/A'}</td>
                         <td>
+                            <select id=${selectorID} required>
+                                <option value="active">Active</option>
+                                <option value="out_of_service">Out of Service</option>
+                                <option value="rented">Rented</option>
+                            </select>
+                            <button onclick="editCar(${car.car_id})">Edit</button>
                             <button onclick="deleteCar(${car.car_id})">Delete</button>
                         </td>
                     `;
@@ -141,6 +147,20 @@
             }
         });
 
+        async function editCar(carId) {
+            const editElement = document.getElementById(`${carId}-edit`);
+            console.log(editElement);
+            const newStatus = editElement.value;
+            const id = carId;
+            const res = await fetch("/admin/editCar", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id, newStatus }),
+                });
+                fetchCars();
+        }
         // Delete a car
         async function deleteCar(carId) {
             if (!confirm('Are you sure you want to delete this car?')) {

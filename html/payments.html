@@ -34,20 +34,7 @@
     </table>
 
     <!-- Form to Add New Payment -->
-    <form id="add-payment-form">
-        <h2>Add New Payment</h2>
-        <select id="reservation_id" required>
-            <option value="" disabled selected>Select Reservation</option>
-            <!-- Reservation options will be dynamically inserted here -->
-        </select>
-        <input type="number" id="amount" placeholder="Amount" required step="0.01">
-        <select id="payment_method" required>
-            <option value="credit_card">Credit Card</option>
-            <option value="cash">Cash</option>
-            <option value="paypal">PayPal</option>
-        </select>
-        <button type="submit">Add Payment</button>
-    </form>
+ 
 
     <script>
         const API_PAYMENTS = '/admin/payments';
@@ -132,7 +119,7 @@
                 alert('Could not load reservations.');
             }
         }
-
+/*
         // Add a new payment
         document.querySelector('#add-payment-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -160,6 +147,7 @@
                 alert('Could not add payment.');
             }
         });
+        */
 
         // Delete a payment
         async function deletePayment(paymentId) {

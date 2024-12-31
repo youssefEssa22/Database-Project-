@@ -1,5 +1,18 @@
 import { Router } from "express";
-import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation, getPayments, getReservationsFiltered, getTotalPaymentAmount, deletePayment } from "../database.mjs";
+import {
+  addOffice,
+  deleteCar,
+  deleteCustomer,
+  deleteOffice,
+  addCar,
+  addReservation,
+  deleteReservation,
+  getPayments,
+  getReservationsFiltered,
+  getTotalPaymentAmount,
+  deletePayment,
+  editCarStatus,
+} from "../database.mjs";
 const admin = Router();
 
 admin.get("/", async (req, res) => res.redirect("/html/Administration.html"));
@@ -26,6 +39,17 @@ admin.post("/cars", async (req, res) => {
       res.status(500).json({ error: "Failed to add car." });
     }
   });
+
+admin.post("/editCar", async (req, res) => {
+  const { id, newStatus } = req.body;
+  try {
+    await editCarStatus(id, newStatus);
+    res.status(201).json({ message: "Status edited successfully!" });
+  } catch (error) {
+    console.error("Error in /editCar:", error);
+    res.status(500).json({ error: "Failed to edit car." });
+  }
+});
   
   admin.delete("/cars/:id", async (req, res) => {
     const carId = req.params.id;

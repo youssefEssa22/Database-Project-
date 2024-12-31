@@ -89,6 +89,16 @@ async function addCar(model, year, plateId, price, status = "active", officeId) 
   }
 }
 
+async function editCarStatus(id, newStatus) {
+  try {
+    await sql`UPDATE cars SET status= ${newStatus}
+    WHERE car_id= ${id}`;
+  } catch (error) {
+    console.log("Error in editCarStatus", error);
+    throw error;
+  }
+}
+
 async function getCarById(id) {
   try {
     const cars = await sql`
@@ -533,4 +543,5 @@ export {
   getRegions,
   getTotalPaymentAmount,
   deletePayment,
+  editCarStatus,
 };

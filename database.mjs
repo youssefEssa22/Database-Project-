@@ -286,7 +286,10 @@ async function addReservation(carId, customerId, pickupDate, returnDate) {
 
 async function deleteReservation(id) {
   try {
-    await sql`DELETE FROM reservations WHERE id = ${id}`
+    await sql.begin(async (transaction) => {
+      await transaction`DELETE FROM payments WHERE reservation_id = ${id}`
+      await transaction`DELETE FROM reservations WHERE reservation_id = ${id}`
+    });
   } catch (error) {
     console.error("Error in deleteReservation:", error);
     throw error;

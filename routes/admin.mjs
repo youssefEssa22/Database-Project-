@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation, getPayments, getReservationsFiltered } from "../database.mjs";
+import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation, getPayments, getReservationsFiltered, getPaymentsWithinPeriod } from "../database.mjs";
 const admin = Router();
 
 admin.get("/", async (req, res) => res.redirect("/html/Administration.html"));
@@ -45,6 +45,17 @@ admin.post("/cars", async (req, res) => {
     } catch (error) {
       console.error("Error in /payments:", error);
       res.status(500).json({ error: "Failed to fetch payments." });
+    }
+  });
+
+  admin.post("/paymentsWithinPeriod", async (req, res) => {
+    try {
+      const {startDate, endDate} = req.body;
+      const payments = await getPaymentsWithinPeriod(startDate, endDate);
+      res.json(payments);
+    } catch (error) {
+      console.error("Error in /paymentsWithinPeriod:", error);
+      res.status(500).json({ error: "Failed to fetch payments within period." });
     }
   });
 

@@ -371,11 +371,27 @@ async function addPayment(reservationId, amount, paymentMethod = "credit_card") 
 async function getPayments(){
   try {
     const payments = await sql`
-      SELECT * FROM payments
+      SELECT *
+      FROM payments
     `;
     return payments;
   } catch (error) {
     console.error("Error in getPayments:", error);
+    throw error;
+  }
+}
+
+async function getPaymentsWithinPeriod(startDate, endDate) {
+  try {
+    const payments = await sql`
+      SELECT *, SUM(amount) AS total_amount
+      FROM payments
+      WHERE payment_date BETWEEN ${startDate} AND ${endDate}
+      GROUP BY payment_id
+    `;
+    return payments;
+  } catch (error) {
+    console.error("Error in getPaymentsWithinPeriod:", error);
     throw error;
   }
 }
@@ -480,4 +496,5 @@ export {
   getReservations,
   getTotalRevenue,
   getRegions,
+  getPaymentsWithinPeriod,
 };

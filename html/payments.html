@@ -9,7 +9,13 @@
 </head>
 <body>
     <h1>Payments Management</h1>
-
+    <form id="payments-filter">
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" required>
+        <label for="end-date">End Date:</label>
+        <input type="date" id="endDate" name="endDate" required>
+    </form>
+    <button id="reset-filters">Reset</button>
     <!-- Table to Display Payments -->
     <table id="payments-table">
         <thead>
@@ -46,12 +52,28 @@
     <script>
         const API_PAYMENTS = '/admin/payments';
         const API_RESERVATIONS = '/reservations';
+        const API_PAYMENTS_WITHIN_PERIOD = "/admin/paymentsWithinPeriod";
 
+        const startDateInput = document.querySelector("#startDate");
+        const endDateInput = document.querySelector("#endDate");
         // Fetch and display payments
         async function fetchPayments() {
             try {
-                const res = await fetch(API_PAYMENTS);
+                let res;
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
+                if (startDate && endDate) {
+                    res = await fetch(API_PAYMENTS_WITHIN_PERIOD, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ startDate, endDate }),
+                    });
+                }
+                else {
+                    res = await fetch(API_PAYMENTS);
+                }
                 const payments = await res.json();
+                console.log(payments)
                 const tableBody = document.querySelector('#payments-table tbody');
                 tableBody.innerHTML = ''; // Clear existing rows
 
@@ -154,6 +176,16 @@
         // Load payments and reservations on page load
         fetchPayments();
         fetchReservations();
+
+        startDateInput.addEventListener("change", fetchPayments);
+        endDateInput.addEventListener("change", fetchPayments);
+
+        const resetFiltersButton = document.querySelector("#reset-filters");
+        resetFiltersButton.addEventListener("click", () => {
+            startDateInput.value = "";
+            endDateInput.value = "";
+            fetchPayments();
+        });
     </script>
 </body>
 </html>

@@ -59,7 +59,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trigger_delete_cars_on_office_delete
-AFTER DELETE ON offices
+BEFORE DELETE ON offices
 FOR EACH ROW
 EXECUTE FUNCTION delete_cars_on_office_delete();
 

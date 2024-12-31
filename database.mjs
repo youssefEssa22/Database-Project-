@@ -382,7 +382,10 @@ async function getPayments(){
 async function getReservations(){
   try {
     const reservations = await sql`
-      SELECT * FROM reservations
+      SELECT r.*, c.model, c.plate_id, cu.name AS customer_name, cu.email AS customer_email
+      FROM reservations r
+      JOIN cars c ON r.car_id = c.car_id
+      JOIN customers cu ON r.customer_id = cu.customer_id
     `;
     return reservations;
   } catch (error) {

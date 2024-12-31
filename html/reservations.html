@@ -15,6 +15,7 @@
         <label for="end-date">End Date:</label>
         <input type="date" id="endDate" name="endDate" required>
     </form>
+    <button id="reset-filters">Reset</button>
     <!-- Table to Display Reservations -->
     <table id="reservations-table">
         <thead>
@@ -217,6 +218,13 @@
 
         startDateInput.addEventListener("change", fetchReservations);
         endDateInput.addEventListener("change", fetchReservations);
+
+        const resetFiltersButton = document.querySelector("#reset-filters");
+        resetFiltersButton.addEventListener("click", () => {
+            startDateInput.value = "";
+            endDateInput.value = "";
+            fetchReservations();
+        })
     </script>
 </body>
 </html>

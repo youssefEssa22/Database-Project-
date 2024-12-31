@@ -392,6 +392,17 @@ async function getPayments(startDate, endDate){
   }
 }
 
+async function deletePayment(paymentID){
+  try {
+    await sql`
+      DELETE FROM payments WHERE payment_id= ${paymentID}
+    `;
+  } catch (error) {
+    console.error("Error in deletePayment:", error);
+    throw error;
+  }
+}
+
 
 async function getTotalPaymentAmount(startDate, endDate) {
   try {
@@ -521,4 +532,5 @@ export {
   getTotalRevenue,
   getRegions,
   getTotalPaymentAmount,
+  deletePayment,
 };

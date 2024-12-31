@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation, getPayments, getReservationsFiltered, getTotalPaymentAmount } from "../database.mjs";
+import { addOffice, deleteCar, deleteCustomer, deleteOffice, addCar, addReservation, deleteReservation, getPayments, getReservationsFiltered, getTotalPaymentAmount, deletePayment } from "../database.mjs";
 const admin = Router();
 
 admin.get("/", async (req, res) => res.redirect("/html/Administration.html"));
@@ -46,6 +46,17 @@ admin.post("/cars", async (req, res) => {
     } catch (error) {
       console.error("Error in /payments:", error);
       res.status(500).json({ error: "Failed to fetch payments." });
+    }
+  });
+
+  admin.delete("/payments/:id", async (req, res) => {
+    const paymentID = req.params.id;
+    try {
+      await deletePayment(paymentID);
+      res.status(200).json({ message: "Payment deleted successfully!" });
+    } catch (error) {
+      console.error("Error in /payments/:id:", error);
+      res.status(500).json({ error: "Failed to delete payment." });
     }
   });
 

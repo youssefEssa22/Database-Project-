@@ -235,7 +235,7 @@ async function createReservationAndPayment(carId, email, startDate, endDate, amo
         SELECT * FROM reservations
         WHERE car_id = ${carId}
           AND (
-            (pickup_date <= ${endDate} AND return_date >= ${startDate})
+            (pickup_date <= ${endDate} AND return_date > ${startDate})
           )
       `;
       if (overlappingReservations.length > 0) {
@@ -254,6 +254,13 @@ async function createReservationAndPayment(carId, email, startDate, endDate, amo
       await transaction`
         INSERT INTO payments (reservation_id, amount, payment_method)
         VALUES (${reservationId}, ${amount}, 'credit_card')
+      `;
+
+      // Step 5: Set the car's status to rented
+      await transaction`
+        UPDATE cars
+        SET status= 'rented'
+        WHERE car_id = ${carId}
       `;
     });
 
@@ -442,11 +449,24 @@ async function getTotalRevenue() {
 
 async function returnCar(reservation_id) {
   try {
-    await sql`
+    await sql.begin(async (transaction) => {
+    await transaction`
       UPDATE reservations
       SET return_date = current_date
       WHERE reservation_id = ${reservation_id}
     `;
+
+    await transaction`
+      UPDATE cars
+      SET status = 'active'
+      WHERE car_id IN (
+        SELECT car_id
+        FROM reservations
+        WHERE return_date <= CURRENT_DATE AND status != 'active'
+      );
+  `
+    });
+
   } catch (error) {
     console.error("Error in returnCar:", error);
     throw error;
